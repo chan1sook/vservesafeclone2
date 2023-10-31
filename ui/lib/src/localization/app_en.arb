@@ -1,0 +1,484 @@
+{
+  "appTitle": "Vservesafe",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "loadingDialogText": "Loading...",
+  "@loadingDialogText": {
+    "description": "Loading Text in Dialog"
+  },
+  "errorReason": "Reason: {reason}",
+  "@errorReason": {
+    "description": "Error Reason Text",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Reason A"
+      }
+    }
+  },
+  "errorMessage": "Message: {message}",
+  "@errorMessage": {
+    "description": "Error Message Text",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Message A"
+      }
+    }
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK Text"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm Text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel Text"
+  },
+  "actionTitle": "Action",
+  "@actionTitle": {
+    "description": "Action Title"
+  },
+  "idTitle": "ID",
+  "@idTitle": {
+    "description": "ID Title"
+  },
+  "statusTitle": "Status",
+  "@statusTitle": {
+    "description": "Status Title"
+  },
+  "statusActive": "Active",
+  "@statusActive": {
+    "description": "Active Status"
+  },
+  "statusInactive": "Inactive",
+  "@statusInactive": {
+    "description": "Inactive Status"
+  },
+  "createdTitle": "Created",
+  "@createdTitle": {
+    "description": "Created Title"
+  },
+  "roleUser": "User",
+  "@roleUser": {
+    "description": "User Role"
+  },
+  "roleManager": "Manager",
+  "@roleManager": {
+    "description": "Manager Role"
+  },
+  "roleAdmin": "Admin",
+  "@roleAdmin": {
+    "description": "Admin Role"
+  },
+  "roleSuperadmin": "Superadmin",
+  "@roleSuperadmin": {
+    "description": "Superadmin Role"
+  },
+  "roleDeveloper": "Developer",
+  "@roleDeveloper": {
+    "description": "Developer Role"
+  },
+  "loginViewTitle": "Login",
+  "@loginViewTitle": {
+    "description": "Login View Title"
+  },
+  "loginWelcomeText": "Welcome back, please login to your account.",
+  "@loginWelcomeText": {
+    "description": "Login welcome text"
+  },
+  "loginEmailTitle": "Email",
+  "@loginEmailTitle": {
+    "description": "Login Email in Login View"
+  },
+  "loginEmailHint": "Email Address",
+  "@loginEmailTitle": {
+    "description": "Login Email Hint in Login View"
+  },
+  "loginPasswordTitle": "Password",
+  "@loginPasswordTitle": {
+    "description": "Login Password in Login View"
+  },
+  "loginPasswordHint": "Password",
+  "@loginPasswordHint": {
+    "description": "Login Password Hint in Login View"
+  },
+  "loginRememberMe": "Remember Me",
+  "@Remember Me": {
+    "description": "Login Remember Me Text in Login View"
+  },
+  "loginAction": "Login",
+  "@loginAction": {
+    "description": "Login loginAction in Login View"
+  },
+  "loginFailedTitle": "Login Failed",
+  "@loginFailedTitle": {
+    "description": "Login Failed Title Dialog"
+  },
+  "loginFailedServerProblem": "Server Problem Occurred",
+  "@loginFailedServerProblem": {
+    "description": "Login Failed Server Problem Reason"
+  },
+  "loginFailedInternetIssue": "Can't Access Internet",
+  "@loginFailedInternetIssue": {
+    "description": "Login Failed Internet Issue Reason"
+  },
+  "loginFailedAuthFailed": "Username/Password Invalid",
+  "@loginFailedAuthFailed": {
+    "description": "Login Failed Auth Failed Reason"
+  },
+  "loginFailedOtherErrorProblem": "Error Occurred",
+  "@loginFailedOtherErrorProblem": {
+    "description": "Login Failed Error Occurred Reason"
+  },
+  "dashboardEditProfileDropdownMenu": "Edit Profile",
+  "@dashboardEditProfileDropdownMenu": {
+    "description": "Edit Profile Dropdown menu in Dashboard View"
+  },
+  "dashboardLogoutDropdownMenu": "Logout",
+  "@dashboardLogoutDropdownMenu": {
+    "description": "Edit Profile Dropdown menu in Dashboard View"
+  },
+  "dashboardMenuSuperAdmin": "Super Admin",
+  "@dashboardMenuSuperAdmin": {
+    "description": "Super Admin in Dashboard Page"
+  },
+  "dashboardMenuAdminAccounts": "Admin Accounts",
+  "@dashboardMenuAdminAccounts": {
+    "description": "Admin Accounts Menu in Dashboard Page"
+  },
+  "adminAccountsNewUserButton": "New",
+  "@adminAccountsNewUserButton": {
+    "description": "New User Button in Admin Accounts Page"
+  },
+  "adminAccountsNameTitle": "Name",
+  "@adminAccountsNameTitle": {
+    "description": "Name Title in Admin Accounts Page"
+  },
+  "adminAccountsEmailTitle": "Email",
+  "@adminAccountsEmailTitle": {
+    "description": "Email Title in Admin Accounts Page"
+  },
+  "adminAccountsRoleTitle": "Type",
+  "@adminAccountsRoleTitle": {
+    "description": "Account Title in Admin Accounts Page"
+  },
+  "adminAccountsNewUserTitle": "New User",
+  "@adminAccountsNewUserTitle": {
+    "description": "New User Title in Admin Accounts Page"
+  },
+  "adminAccountsEditUserTitle": "Edit User",
+  "@adminAccountsEditUserTitle": {
+    "description": "Edit User Title in Admin Accounts Page"
+  },
+
+  "adminAccountEditRoleTitle": "Account Type",
+  "@adminAccountEditRoleTitle": {
+    "description": "Role Title in Admin Accounts Edit Page"
+  },
+  "adminAccountEditActualNameTitle": "Name",
+  "@adminAccountEditActualNameTitle": {
+    "description": "Name Title in Admin Accounts Edit Page"
+  },
+  "adminAccountEditUsernameTitle": "Email",
+  "@adminAccountEditUsernameTitle": {
+    "description": "Username Title in Admin Accounts Edit Page"
+  },
+  "adminAccountEditUsernameInvalidText": "Must be Email",
+  "@adminAccountEditUsernameInvalidText": {
+    "description": "Username Invalid Text in Admin Accounts Edit Page"
+  },
+  "adminAccountEditPasswordTitle": "Password",
+  "@adminAccountEditPasswordTitle": {
+    "description": "Password Title in Admin Accounts Edit Page"
+  },
+  "adminAccountEditPasswordHintText": "At least 6 characters",
+  "@adminAccountEditPasswordHintText": {
+    "description": "Password Hint in Admin Accounts Edit Page"
+  },
+  "adminAccountEditGeneratePasswordText": "Generate Password",
+  "@adminAccountEditGeneratePasswordText": {
+    "description": "Generate Password Text in Admin Accounts Edit Page"
+  },
+  "adminAccountEditPasswordConfirmTitle": "Confirm Password",
+  "@adminAccountEditPasswordConfirmTitle": {
+    "description": "Confirm Password Title in Admin Accounts Edit Page"
+  },
+  "adminAccountEditPasswordConfirmHintText": "Confirm Password least 6 characters",
+  "@adminAccountEditPasswordConfirmHintText": {
+    "description": "Confirm Password Hint Text in Admin Accounts Edit Page"
+  },
+  "adminAccountEditPasswordConfirmInvalidText": "Password not match",
+  "@adminAccountEditPasswordConfirmInvalidText": {
+    "description": "Confirm Password  Invalid Text in Admin Accounts Edit Page"
+  },
+  "adminAccountEditNoteTitle": "Note",
+  "@adminAccountEditNoteTitle": {
+    "description": "Note Title in Admin Accounts Edit Page"
+  },
+
+  "adminAccountsSaveButton": "Save",
+  "@adminAccountsSaveButton": {
+    "description": "Save Button in Admin Accounts Page"
+  },
+  "adminAccountsAddUserSuccessfulTitle": "Add User Sucessful",
+  "@adminAccountsAddUserSuccessfulTitle": {
+    "description": "Sucessful Add Admin User Title Dialog"
+  },
+  "adminAccountsAddUserFailedTitle": "Add User Failed",
+  "@adminAccountsAddUserFailedTitle": {
+    "description": "Failed Add Admin User Title Dialog"
+  },
+  "adminAccountsEditUserSuccessfulTitle": "Edit User Sucessful",
+  "@adminAccountsAddUserSuccessfulTitle": {
+    "description": "Sucessful Edit Admin User Title Dialog"
+  },
+  "adminAccountsEditUserFailedTitle": "Edit User Failed",
+  "@adminAccountsEditUserFailedTitle": {
+    "description": "Failed Edit Admin User Title Dialog"
+  },
+  "adminAccountsDeleteUserWarningTitle": "Do you want to delete user \"{user}\"?",
+  "@adminAccountsDeleteUserWarningTitle": {
+    "description": "Delete Admin User Warning Title Dialog",
+    "placeholders": {
+      "user": {
+        "type": "String",
+        "example": "User A"
+      }
+    }
+  },
+  "adminAccountsDeleteUserSuccessfulTitle": "Delete User Sucessful",
+  "@adminAccountsDeleteUserSuccessfulTitle": {
+    "description": "Sucessful Delete Admin User Title Dialog"
+  },
+  "adminAccountsDeleteUserFailedTitle": "Delete User Failed",
+  "@adminAccountsDeleteUserFailedTitle": {
+    "description": "Failed Delete Admin User Title Dialog"
+  },
+  "dashboardMenuSiteLists": "Site Lists",
+  "@dashboardMenuSiteLists": {
+    "description": "Site Lists Menu in Dashboard Page"
+  },
+  "siteListsNewSiteButton": "New",
+  "@siteListsNewSiteButton": {
+    "description": "New Site Button in Site Lists Page"
+  },
+  "siteListsNameTitle": "Name",
+  "@siteListsNameTitle": {
+    "description": "Name Title in Site Lists Page"
+  },
+  "siteListsNoteTitle": "Note",
+  "@siteListsNoteTitle": {
+    "description": "Note Title in Site Lists Page"
+  },
+  "siteListsNewSiteTitle": "New Site",
+  "@siteListsNewSiteTitle": {
+    "description": "New Site Title in Site Lists Page"
+  },
+  "siteListsEditSiteTitle": "Edit Site",
+  "@siteListsEditSiteTitle": {
+    "description": "Edit Site Title in Site Lists Page"
+  },
+  "siteListsFormActiveSwitch": "Active",
+  "@siteListsFormActiveSwitch": {
+    "description": "Active Switch in Site Lists Page"
+  },
+  "siteEditLogoTitle": "Logo",
+  "@siteEditLogoTitle": {
+    "description": "Logo Title in Site Edit of Site Lists Page"
+  },
+  "siteEditChangeLogoButton": "Change Logo",
+  "@siteEditChangeLogoButton": {
+    "description": "Change Logo Button Text in Site Edit of Site Lists Page"
+  },
+  "siteEditRevertLogoButton": "Revert",
+  "@siteEditRevertLogoButton": {
+    "description": "Revert Logo Button Text in Site Edit of Site Lists Page"
+  },
+  "siteEditNameTitle": "Name",
+  "@siteEditNameTitle": {
+    "description": "Name Title in Site Edit of Site Lists Page"
+  },
+  "siteEditEmailContractTitle": "Contract Email",
+  "@siteEditEmailContractTitle": {
+    "description": "Contract Email Title in Site Edit of Site Lists Page"
+  },
+  "siteEditPhoneTitle": "Phone",
+  "@siteEditPhoneTitle": {
+    "description": "Phone Title in Site Edit of Site Lists Page"
+  },
+  "siteEditAdminsTitle": "Administrators",
+  "@siteEditAdminsTitle": {
+    "description": "Administrators Title in Site Edit of Site Lists Page"
+  },
+  "siteEditNotesTitle": "Notes",
+  "@siteEditNotesTitle": {
+    "description": "Note Title in Site Edit of Site Lists Page"
+  },
+  "siteEditSaveButton": "Save",
+  "@siteEditSaveButton": {
+    "description": "Save Button in Site Edit of Site Lists Page"
+  },
+  "siteEditProgressUpdateLogo": "Uploading Logo Image...",
+  "@siteEditProgressUpdateLogo": {
+    "description": "Uploading Logo Progress in Site Edit"
+  },
+  "siteEditProgressAddSite": "Add Site...",
+  "@siteEditProgressAddSite": {
+    "description": "Add Site Progress in Site Edit"
+  },
+  "siteEditProgressEditSite": "Edit Site...",
+  "@siteEditProgressEditSite": {
+    "description": "Edit Site Progress in Site Edit"
+  },
+  "siteEditAddSiteSuccessfulTitle": "Add Site Sucessful",
+  "@siteEditAddSiteSuccessfulTitle": {
+    "description": "Sucessful Add Site Title Dialog"
+  },
+  "siteEditAddSiteFailedTitle": "Add Site Failed",
+  "@siteEditAddSiteFailedTitle": {
+    "description": "Failed Add Site Title Dialog"
+  },
+  "siteEditEditSiteSuccessfulTitle": "Edit Site Sucessful",
+  "@siteEditEditSiteSuccessfulTitle": {
+    "description": "Sucessful Edit Site Title Dialog"
+  },
+  "siteEditEditSiteFailedTitle": "Edit Site Failed",
+  "@siteEditEditSiteFailedTitle": {
+    "description": "Failed Edit Site Title Dialog"
+  },
+  "siteEditDeleteSiteWarningTitle": "Do you want to delete site \"{site}\"?",
+  "@siteEditDeleteSiteWarningTitle": {
+    "description": "Delete Site Warning Title Dialog",
+    "placeholders": {
+      "site": {
+        "type": "String",
+        "example": "Site A"
+      }
+    }
+  },
+  "siteEditDeleteSiteSuccessfulTitle": "Delete Site Sucessful",
+  "@siteEditDeleteSiteSuccessfulTitle": {
+    "description": "Sucessful Delete Site Title Dialog"
+  },
+  "siteEditDeleteSiteFailedTitle": "Delete Site Failed",
+  "@siteEditDeleteSiteFailedTitle": {
+    "description": "Failed Delete Site Title Dialog"
+  },
+  "dashboardMenuProfile": "Profile",
+  "@dashboardMenuProfile": {
+    "description": "Profile Menu in Dashboard Page"
+  },
+  "profileTabInfomation": "Infomation",
+  "@profileTabInfomation": {
+    "description": "Infomation Tab in Profile Page"
+  },
+  "profileTabEdit": "Edit",
+  "@profileTabEdit": {
+    "description": "Edit Tab in Profile Page"
+  },
+  "profileEditAvatarTitle": "Photo/Avatar",
+  "@profileEditAvatarTitle": {
+    "description": "Photo/Avatar Title in Edit Tab of Profile Page"
+  },
+  "profileEditChangeAvatarButton": "Change Photo",
+  "@profileEditChangeAvatarButton": {
+    "description": "Change Photo Button Text in Edit Tab of Profile Page"
+  },
+  "profileEditRevertAvatarButton": "Revert",
+  "@profileEditChangeAvatarButton": {
+    "description": "Revert Photo Button Text in Edit Tab of Profile Page"
+  },
+  "profileEditChangePasswordTitle": "Change Password",
+  "@profileEditChangePasswordTitle": {
+    "description": "Change Password Title in Edit Tab of Profile Page"
+  },
+  "profileEditChangePasswordButton": "Change",
+  "@profileEditChangePasswordButton": {
+    "description": "Change Password Button in Change Password Tab of Profile Page"
+  },
+  "profileEditOldPasswordTextFieldLabel": "Old Password",
+  "@profileEditOldPasswordTextFieldLabel": {
+    "description": "Old Password Text Field Label in Change Password Tab of Profile Page"
+  },
+  "profileEditNewPasswordTextFieldLabel": "New Password",
+  "@profileEditNewPasswordTextFieldLabel": {
+    "description": "New Password Text Field Label in Change Password Tab of Profile Page"
+  },
+  "profileEditNewPasswordTextFieldHint": "New Password least 6 characters",
+  "@profileEditNewPasswordTextFieldHint": {
+    "description": "New Password Text Field Hint in Change Password Tab of Profile Page"
+  },
+  "profileEditNewPasswordConfirmTextFieldLabel": "Confirm New Password",
+  "@profileEditNewPasswordConfirmTextFieldLabel": {
+    "description": "Confirm New Password Text Field Label in Change Password Tab of Profile Page"
+  },
+  "profileEditNewPasswordConfirmTextFieldHint": "Confirm New Password least 6 characters",
+  "@profileEditNewPassworConfirmdTextFieldHint": {
+    "description": "New Password Confirm Text Field Hint in Change Password Tab of Profile Page"
+  },
+  "profileEditNewPasswordConfirmInvalidText": "Password Not Match",
+  "@profileEditNewPassworConfirmdTextFieldHint": {
+    "description": "New Password Confirm Invalid Text in Change Password Tab of Profile Page"
+  },
+  "profileEditChangePasswordConfirmButton": "Confirm",
+  "@profileEditChangePasswordConfirmButton": {
+    "description": "Change Password Confirm Button in Change Password Tab of Profile Page"
+  },
+  "profileEditChangePasswordRevertButton": "Revert",
+  "@profileEditChangePasswordRevertButton": {
+    "description": "Revert Change Password Button in Change Password Tab of Profile Page"
+  },
+  "profileEditUsernameTitle": "Account Email",
+  "@profileEditUsernameTitle": {
+    "description": "Account Email (Username) Title in Edit Tab of Profile Page"
+  },
+  "profileEditActualNameTitle": "Actual Name",
+  "@profileEditActualNameTitle": {
+    "description": "Actual Name Title in Edit Tab of Profile Page"
+  },
+  "profileEditContractEmailTitle": "Contract Email",
+  "@profileEditContractEmailTitle": {
+    "description": "Contract Email Title in Edit Tab of Profile Page"
+  },
+  "profileEditPhoneTitle": "Phone",
+  "@profileEditPhoneTitle": {
+    "description": "Phone Title in Edit Tab of Profile Page"
+  },
+  "profileEditPositionTitle": "Position",
+  "@profileEditPositionTitle": {
+    "description": "Position Title in Edit Tab of Profile Page"
+  },
+  "profileEditAddressTitle": "Address",
+  "@profileEditAddressTitle": {
+    "description": "Address Title in Edit Tab of Profile Page"
+  },
+  "profileEditNotesTitle": "Notes",
+  "@profileEditNotesTitle": {
+    "description": "Notes Title in Edit Tab of Profile Page"
+  },
+  "profileEditSaveButton": "Save",
+  "@profileEditSaveButton": {
+    "description": "Save Button in Edit Tab of Profile Page"
+  },
+  "profileEditProgressUpdateAvatar": "Uploading Avatar Image...",
+  "@profileEditProgressUpdateAvatar": {
+    "description": "Uploading Avatar Progress in Profile Update"
+  },
+  "profileEditProgressUpdateProfile": "Updating Profile...",
+  "@profileEditProgressUpdateProfile": {
+    "description": "Updating Profile Progress in Profile Update"
+  },
+  "profileEditSuccessfulTitle": "Profile Updated Sucessful",
+  "@profileEditSuccessfulTitle": {
+    "description": "Sucessful Profile Update Title Dialog"
+  },
+  "profileEditFailedTitle": "Profile Updated Failed",
+  "@profileEditFailedTitle": {
+    "description": "Failed Profile Update Title Dialog"
+  }
+}
