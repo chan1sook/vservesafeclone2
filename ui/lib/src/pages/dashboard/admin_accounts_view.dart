@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:password_generator/src/password_generator.dart';
-import 'package:vservesafe/src/components/alert_component.dart';
+import 'package:password_generator/password_generator.dart';
+import 'package:vservesafe/src/components/icon_button_component.dart';
 import 'package:vservesafe/src/components/pagination_component.dart';
+import 'package:vservesafe/src/components/scrollable_container.dart';
 import 'package:vservesafe/src/components/status_item_component.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
@@ -16,6 +17,7 @@ import 'package:vservesafe/src/models/admin_user_edit_data.dart';
 import 'package:vservesafe/src/models/user_data.dart';
 import 'package:vservesafe/src/services/api_service.dart';
 import 'package:vservesafe/src/services/settings_service.dart';
+import 'package:vservesafe/src/utils/alert_dialog.dart';
 
 class AdminAccountsDashboardView extends StatefulWidget {
   const AdminAccountsDashboardView({
@@ -41,7 +43,7 @@ class _AdminAccountsDashboardViewState
   int _pageSize = 10;
 
   int? _sortColumnIndex;
-  bool _sortAssending = true;
+  bool _sortAscending = true;
 
   final List<VserveUserData> _users = [];
 
@@ -70,8 +72,8 @@ class _AdminAccountsDashboardViewState
       );
 
       List<VserveUserData> newUsers = [];
-      final sitesData = response.data["users"] as List<dynamic>;
-      for (final ele in sitesData) {
+      final usersData = response.data["users"] as List<dynamic>;
+      for (final ele in usersData) {
         if (ele is Map<String, dynamic>) {
           newUsers.add(VserveUserData.parseFromRawData(ele));
         }
@@ -109,7 +111,7 @@ class _AdminAccountsDashboardViewState
                       _showAddAdminUserDialog();
                     },
                     child: Text(
-                      AppLocalizations.of(context)!.siteListsNewSiteButton,
+                      AppLocalizations.of(context)!.adminAccountsNewUserButton,
                     ),
                   ),
                 ),
@@ -132,42 +134,57 @@ class _AdminAccountsDashboardViewState
                               BoxConstraints(minWidth: constraints.minWidth),
                           child: DataTable(
                             sortColumnIndex: _sortColumnIndex,
-                            sortAscending: _sortAssending,
+                            sortAscending: _sortAscending,
                             headingTextStyle:
                                 const TextStyle(fontWeight: FontWeight.bold),
                             columns: [
                               DataColumn(
-                                  label: Text(AppLocalizations.of(context)!
-                                      .actionTitle)),
+                                label: Text(
+                                    AppLocalizations.of(context)!.actionTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.actionTitle,
+                              ),
                               if (SettingsService.showItemId)
                                 DataColumn(
                                   label: Text(
                                       AppLocalizations.of(context)!.idTitle),
+                                  tooltip:
+                                      AppLocalizations.of(context)!.idTitle,
                                   onSort: _setSortColumn,
                                 ),
                               DataColumn(
                                 label: Text(
                                     AppLocalizations.of(context)!.statusTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.statusTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
                                 label: Text(AppLocalizations.of(context)!
                                     .adminAccountsNameTitle),
+                                tooltip: AppLocalizations.of(context)!
+                                    .adminAccountsNameTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
                                 label: Text(AppLocalizations.of(context)!
                                     .adminAccountsRoleTitle),
+                                tooltip: AppLocalizations.of(context)!
+                                    .adminAccountsRoleTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
                                 label: Text(AppLocalizations.of(context)!
                                     .adminAccountsEmailTitle),
+                                tooltip: AppLocalizations.of(context)!
+                                    .adminAccountsEmailTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
                                 label: Text(
                                     AppLocalizations.of(context)!.createdTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.createdTitle,
                                 onSort: _setSortColumn,
                               ),
                             ],
@@ -181,49 +198,25 @@ class _AdminAccountsDashboardViewState
                                                   ele.id
                                               ? []
                                               : [
-                                                  ElevatedButton(
+                                                  IconButtonComponent(
+                                                    icon:
+                                                        FontAwesomeIcons.pencil,
+                                                    color: Colors.orange,
+                                                    width: 32,
                                                     onPressed: () {
                                                       _showEditAdminUserDialog(
                                                           ele);
                                                     },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      shape:
-                                                          const CircleBorder(),
-                                                      minimumSize: Size.zero,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              18),
-                                                      backgroundColor:
-                                                          Colors.grey,
-                                                    ),
-                                                    child: const Icon(
-                                                      FontAwesomeIcons.pencil,
-                                                      color: Colors.white,
-                                                      size: 14,
-                                                    ),
                                                   ),
-                                                  ElevatedButton(
+                                                  const SizedBox(width: 7),
+                                                  IconButtonComponent(
+                                                    icon:
+                                                        FontAwesomeIcons.trash,
+                                                    width: 32,
                                                     onPressed: () {
                                                       _showDeleteAdminUserWarning(
                                                           ele);
                                                     },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      shape:
-                                                          const CircleBorder(),
-                                                      minimumSize: Size.zero,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              18),
-                                                      backgroundColor:
-                                                          Colors.orange,
-                                                    ),
-                                                    child: const Icon(
-                                                      FontAwesomeIcons.trash,
-                                                      color: Colors.white,
-                                                      size: 14,
-                                                    ),
                                                   ),
                                                 ],
                                         ),
@@ -291,12 +284,12 @@ class _AdminAccountsDashboardViewState
   void _setSortColumn(int columnIndex, bool assending) {
     if (_sortColumnIndex != columnIndex) {
       _sortColumnIndex = columnIndex;
-      _sortAssending = assending;
-    } else if (_sortAssending == true) {
-      _sortAssending = false;
+      _sortAscending = assending;
+    } else if (_sortAscending == true) {
+      _sortAscending = false;
     } else {
       _sortColumnIndex = null;
-      _sortAssending = true;
+      _sortAscending = true;
     }
 
     _sortUsers();
@@ -339,42 +332,42 @@ class _AdminAccountsDashboardViewState
 
   void _sortUsers() {
     final column = _sortIndexToField(_sortColumnIndex);
-    developer.log("$_sortColumnIndex => $column ($_sortAssending}",
+    developer.log("$_sortColumnIndex => $column ($_sortAscending)",
         name: "Sort");
 
     switch (column) {
       case "id":
         _users.sort((a, b) =>
-            _sortAssending ? a.id.compareTo(b.id) : b.id.compareTo(a.id));
+            _sortAscending ? a.id.compareTo(b.id) : b.id.compareTo(a.id));
         break;
       case "active":
         _users.sort((a, b) {
           if (a.active & !b.active) {
-            return _sortAssending ? -1 : 1;
+            return _sortAscending ? -1 : 1;
           } else if (!a.active & b.active) {
-            return _sortAssending ? 1 : -1;
+            return _sortAscending ? 1 : -1;
           }
           return 0;
         });
         break;
       case "actualName":
-        _users.sort((a, b) => _sortAssending
+        _users.sort((a, b) => _sortAscending
             ? a.actualName.compareTo(b.actualName)
             : b.actualName.compareTo(a.actualName));
         break;
       case "role":
         final roles = ["developer", "superadmin", "admin"];
-        _users.sort((a, b) => _sortAssending
+        _users.sort((a, b) => _sortAscending
             ? roles.indexOf(a.role) - roles.indexOf(b.role)
             : roles.indexOf(b.role) - roles.indexOf(a.role));
         break;
       case "username":
-        _users.sort((a, b) => _sortAssending
+        _users.sort((a, b) => _sortAscending
             ? a.username.compareTo(b.username)
             : b.username.compareTo(a.username));
         break;
       case "createdAt":
-        _users.sort((a, b) => _sortAssending
+        _users.sort((a, b) => _sortAscending
             ? a.createdAt.compareTo(b.createdAt)
             : b.createdAt.compareTo(a.createdAt));
         break;
@@ -426,7 +419,7 @@ class _AdminAccountsDashboardViewState
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!
-              .adminAccountsDeleteUserWarningTitle(userData.username)),
+              .adminAccountDeleteUserWarningTitle(userData.username)),
           actions: <Widget>[
             TextButton(
               child: Text(AppLocalizations.of(context)!.cancel),
@@ -446,13 +439,13 @@ class _AdminAccountsDashboardViewState
     );
   }
 
-  void _addAdminUser(VserveEditAdminUserData editedUserData) async {
+  void _addAdminUser(VserveEditUserDataAdmin editedUserData) async {
     _showLoadingDialog();
 
     final successText =
-        AppLocalizations.of(context)!.adminAccountsAddUserSuccessfulTitle;
+        AppLocalizations.of(context)!.adminAccountAddUserSuccessfulTitle;
     final failedText =
-        AppLocalizations.of(context)!.adminAccountsAddUserFailedTitle;
+        AppLocalizations.of(context)!.adminAccountAddUserFailedTitle;
 
     try {
       await ApiService.dio.post(
@@ -482,13 +475,13 @@ class _AdminAccountsDashboardViewState
     }
   }
 
-  void _editAdminUser(VserveEditAdminUserData editedUserData) async {
+  void _editAdminUser(VserveEditUserDataAdmin editedUserData) async {
     _showLoadingDialog();
 
     final successText =
-        AppLocalizations.of(context)!.adminAccountsEditUserSuccessfulTitle;
+        AppLocalizations.of(context)!.adminAccountEditUserSuccessfulTitle;
     final failedText =
-        AppLocalizations.of(context)!.adminAccountsEditUserFailedTitle;
+        AppLocalizations.of(context)!.adminAccountEditUserFailedTitle;
 
     try {
       await ApiService.dio.post(
@@ -522,9 +515,9 @@ class _AdminAccountsDashboardViewState
     _showLoadingDialog();
 
     final successText =
-        AppLocalizations.of(context)!.siteEditDeleteSiteSuccessfulTitle;
+        AppLocalizations.of(context)!.adminAccountDeleteUserSuccessfulTitle;
     final failedText =
-        AppLocalizations.of(context)!.siteEditDeleteSiteFailedTitle;
+        AppLocalizations.of(context)!.adminAccountDeleteUserFailedTitle;
 
     try {
       await ApiService.dio.post(
@@ -563,15 +556,14 @@ class _AdminAccountsDashboardViewState
 
     _isLoadingOpened = true;
 
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: SettingsController.isDebugMode,
-      builder: (BuildContext context) {
-        return LoadingAlertDialog(text: _progressText);
+    return showLoadingDialog(
+      context,
+      () {
+        _isLoadingOpened = false;
+        setState(() {});
       },
-    ).then((value) {
-      _isLoadingOpened = false;
-    });
+      _progressText,
+    );
   }
 
   Future<void> _showSuccessDialog(String title) async {
@@ -632,15 +624,15 @@ class _AdminUserFormDialog extends StatefulWidget {
   });
 
   final VserveUserData? originalData;
-  final Function(VserveEditAdminUserData)? onEditAdminUser;
+  final Function(VserveEditUserDataAdmin)? onEditAdminUser;
 
   @override
   State<_AdminUserFormDialog> createState() => _AdminUserFormDialogState();
 }
 
 class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
-  final VserveEditAdminUserData _editedAdminUserData =
-      VserveEditAdminUserData(VserveUserData());
+  final VserveEditUserDataAdmin _editedAdminUserData =
+      VserveEditUserDataAdmin(VserveUserData());
   final PasswordGenerator _passwordGenerator = PasswordGenerator(
     length: 12,
     hasCapitalLetters: true,
@@ -649,7 +641,7 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
     hasSymbols: true,
   );
 
-  final TextEditingController _acutalNameTextFieldCtrl =
+  final TextEditingController _actualNameTextFieldCtrl =
       TextEditingController();
   final TextEditingController _usernameTextFieldCtrl = TextEditingController();
   final TextEditingController _passwordTextFieldCtrl = TextEditingController();
@@ -671,7 +663,7 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
       _editedAdminUserData.needEditPassword = true;
     }
 
-    _acutalNameTextFieldCtrl.text = _editedAdminUserData.editedData.actualName;
+    _actualNameTextFieldCtrl.text = _editedAdminUserData.editedData.actualName;
     _usernameTextFieldCtrl.text = _editedAdminUserData.editedData.username;
     _passwordTextFieldCtrl.text = _editedAdminUserData.newPassword;
     _confirmPasswordTextFieldCtrl.text =
@@ -712,7 +704,7 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(AppLocalizations.of(context)!
-                        .siteListsFormActiveSwitch),
+                        .adminAccountsFormActiveSwitch),
                     const SizedBox(width: 14),
                     Switch(
                       value: _editedAdminUserData.editedData.active,
@@ -724,295 +716,309 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
                     ),
                   ],
                 ),
-                Table(
-                  columnWidths: const {0: IntrinsicColumnWidth()},
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: const TableBorder(
-                    horizontalInside: BorderSide(color: Colors.black12),
-                    verticalInside: BorderSide(color: Colors.black12),
-                  ),
-                  children: [
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .adminAccountEditRoleTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              border: OutlineInputBorder(),
-                            ),
-                            value: _editedAdminUserData.editedData.role,
-                            onChanged: (value) {
-                              if (value != null) {
-                                _editedAdminUserData.editedData.role = value;
-                                setState(() => {});
-                              }
-                            },
-                            items: [
-                              "admin",
-                              "superadmin",
-                              if (_editedAdminUserData.editedData.role ==
-                                  "developer")
-                                "developer"
-                            ].map((v) {
-                              return DropdownMenuItem<String>(
-                                value: v,
-                                child: Text(
-                                  _translatedRole(context, v),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
+                ScrollableContainerComponent(
+                  child: Table(
+                    columnWidths: const {0: IntrinsicColumnWidth()},
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    border: const TableBorder(
+                      horizontalInside: BorderSide(color: Colors.black12),
+                      verticalInside: BorderSide(color: Colors.black12),
                     ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .adminAccountEditActualNameTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _acutalNameTextFieldCtrl,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.suitcase),
-                              border: OutlineInputBorder(),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedAdminUserData.editedData.actualName =
-                                  value;
-                              setState(() {});
-                            },
+                    children: [
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .adminAccountEditRoleTitle),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .adminAccountEditUsernameTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _usernameTextFieldCtrl,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              prefixIcon: const Icon(FontAwesomeIcons.user),
-                              border: const OutlineInputBorder(),
-                              errorText: _editedAdminUserData.isUsernameValid
-                                  ? null
-                                  : AppLocalizations.of(context)!
-                                      .adminAccountEditUsernameInvalidText,
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: widget.originalData != null
-                                ? null
-                                : (value) {
-                                    _editedAdminUserData.editedData.username =
-                                        value;
-                                    setState(() {});
-                                  },
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Wrap(
-                            spacing: 7,
-                            runSpacing: 3.5,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(AppLocalizations.of(context)!
-                                  .adminAccountEditPasswordTitle),
-                              _PasswordEyeComponent(
-                                hideState: _hidePassword,
-                                onTap: () {
-                                  _hidePassword = !_hidePassword;
-                                  setState(() {});
-                                },
+                          Padding(
+                            padding: tablePadding,
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                border: OutlineInputBorder(),
                               ),
-                            ],
+                              value: _editedAdminUserData.editedData.role,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  _editedAdminUserData.editedData.role = value;
+                                  setState(() => {});
+                                }
+                              },
+                              items: [
+                                "admin",
+                                "superadmin",
+                                if (_editedAdminUserData.editedData.role ==
+                                    "developer")
+                                  "developer"
+                              ].map((v) {
+                                return DropdownMenuItem<String>(
+                                  value: v,
+                                  child: Text(
+                                    _translatedRole(context, v),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (widget.originalData != null)
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        _editedAdminUserData.needEditPassword =
-                                            true;
-                                        setState(() {});
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const FaIcon(FontAwesomeIcons.key,
-                                              size: 14),
-                                          const SizedBox(width: 7),
-                                          Text(AppLocalizations.of(context)!
-                                              .profileEditChangePasswordButton),
-                                        ],
-                                      ),
-                                    ),
-                                    if (_editedAdminUserData
-                                        .needEditPassword) ...[
-                                      const SizedBox(width: 14),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .adminAccountEditActualNameTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _actualNameTextFieldCtrl,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.user),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedAdminUserData.editedData.actualName =
+                                    value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .adminAccountEditUsernameTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _usernameTextFieldCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                prefixIcon:
+                                    const Icon(FontAwesomeIcons.envelope),
+                                border: const OutlineInputBorder(),
+                                errorText: _editedAdminUserData.isUsernameValid
+                                    ? null
+                                    : AppLocalizations.of(context)!
+                                        .adminAccountEditUsernameInvalidText,
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: widget.originalData != null
+                                  ? null
+                                  : (value) {
+                                      _editedAdminUserData.editedData.username =
+                                          value;
+                                      setState(() {});
+                                    },
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Wrap(
+                              spacing: 7,
+                              runSpacing: 3.5,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(AppLocalizations.of(context)!
+                                    .adminAccountEditPasswordTitle),
+                                if (_editedAdminUserData.needEditPassword)
+                                  _PasswordEyeComponent(
+                                    hideState: _hidePassword,
+                                    onTap: () {
+                                      _hidePassword = !_hidePassword;
+                                      setState(() {});
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (widget.originalData != null &&
+                                    !_editedAdminUserData.needEditPassword)
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
                                       OutlinedButton(
                                         onPressed: () {
                                           _editedAdminUserData
-                                              .needEditPassword = false;
+                                              .needEditPassword = true;
                                           setState(() {});
                                         },
-                                        child: Text(AppLocalizations.of(
-                                                context)!
-                                            .profileEditChangePasswordRevertButton),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const FaIcon(FontAwesomeIcons.key,
+                                                size: 14),
+                                            const SizedBox(width: 7),
+                                            Text(AppLocalizations.of(context)!
+                                                .adminAccountChangePasswordButton),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ],
-                                ),
-                              if (_editedAdminUserData.needEditPassword) ...[
-                                if (widget.originalData != null)
-                                  const SizedBox(height: 7),
-                                TextField(
-                                  controller: _passwordTextFieldCtrl,
-                                  obscureText: _hidePassword,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    prefixIcon:
-                                        const Icon(FontAwesomeIcons.key),
-                                    border: const OutlineInputBorder(),
-                                    labelText: AppLocalizations.of(context)!
-                                        .adminAccountEditPasswordHintText,
                                   ),
-                                  textInputAction: TextInputAction.next,
-                                  onChanged: (value) {
-                                    _editedAdminUserData.newPassword = value;
-                                    setState(() {});
-                                  },
-                                ),
-                                const SizedBox(height: 7),
-                                OutlinedButton(
-                                    onPressed: () {
-                                      final pw =
-                                          _passwordGenerator.generatePassword();
-                                      _editedAdminUserData.newPassword = pw;
-                                      _editedAdminUserData.newPasswordConfirm =
-                                          pw;
-                                      _passwordTextFieldCtrl.text = pw;
-                                      _confirmPasswordTextFieldCtrl.text = pw;
-                                      _hidePassword = false;
+                                if (_editedAdminUserData.needEditPassword) ...[
+                                  if (widget.originalData != null)
+                                    const SizedBox(height: 7),
+                                  TextField(
+                                    controller: _passwordTextFieldCtrl,
+                                    obscureText: _hidePassword,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      prefixIcon:
+                                          const Icon(FontAwesomeIcons.key),
+                                      border: const OutlineInputBorder(),
+                                      labelText: AppLocalizations.of(context)!
+                                          .adminAccountEditPasswordHintText,
+                                    ),
+                                    textInputAction: TextInputAction.next,
+                                    onChanged: (value) {
+                                      _editedAdminUserData.newPassword = value;
                                       setState(() {});
                                     },
-                                    child: Text(AppLocalizations.of(context)!
-                                        .adminAccountEditGeneratePasswordText)),
+                                  ),
+                                  const SizedBox(height: 7),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (widget.originalData != null) ...[
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            _editedAdminUserData
+                                                .needEditPassword = false;
+                                            setState(() {});
+                                          },
+                                          child: Text(AppLocalizations.of(
+                                                  context)!
+                                              .adminAccountChangePasswordRevertButton),
+                                        ),
+                                        const SizedBox(width: 7),
+                                      ],
+                                      OutlinedButton(
+                                          onPressed: () {
+                                            final pw = _passwordGenerator
+                                                .generatePassword();
+                                            _editedAdminUserData.newPassword =
+                                                pw;
+                                            _editedAdminUserData
+                                                .newPasswordConfirm = pw;
+                                            _passwordTextFieldCtrl.text = pw;
+                                            _confirmPasswordTextFieldCtrl.text =
+                                                pw;
+                                            _hidePassword = false;
+                                            setState(() {});
+                                          },
+                                          child: Text(AppLocalizations.of(
+                                                  context)!
+                                              .adminAccountEditGeneratePasswordText)),
+                                    ],
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Wrap(
-                            spacing: 7,
-                            runSpacing: 3.5,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(AppLocalizations.of(context)!
-                                  .adminAccountEditPasswordConfirmTitle),
-                              if (_editedAdminUserData.needEditPassword)
-                                _PasswordEyeComponent(
-                                  hideState: _hidePassword,
-                                  onTap: () {
-                                    _hidePassword = !_hidePassword;
-                                    setState(() {});
-                                  },
+                        ],
+                      ),
+                      if (_editedAdminUserData.needEditPassword)
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: tablePadding,
+                              child: Wrap(
+                                spacing: 7,
+                                runSpacing: 3.5,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text(AppLocalizations.of(context)!
+                                      .adminAccountEditPasswordConfirmTitle),
+                                  _PasswordEyeComponent(
+                                    hideState: _hidePassword,
+                                    onTap: () {
+                                      _hidePassword = !_hidePassword;
+                                      setState(() {});
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: tablePadding,
+                              child: TextField(
+                                controller: _confirmPasswordTextFieldCtrl,
+                                obscureText: _hidePassword,
+                                keyboardType: TextInputType.visiblePassword,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  prefixIcon: const Icon(FontAwesomeIcons.key),
+                                  border: const OutlineInputBorder(),
+                                  labelText: AppLocalizations.of(context)!
+                                      .adminAccountEditPasswordConfirmHintText,
+                                  errorText: _editedAdminUserData
+                                          .isNewPasswordConfirmValid
+                                      ? null
+                                      : AppLocalizations.of(context)!
+                                          .adminAccountEditPasswordConfirmInvalidText,
                                 ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _confirmPasswordTextFieldCtrl,
-                            obscureText: _hidePassword,
-                            keyboardType: TextInputType.visiblePassword,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              prefixIcon: const Icon(FontAwesomeIcons.key),
-                              border: const OutlineInputBorder(),
-                              labelText: AppLocalizations.of(context)!
-                                  .adminAccountEditPasswordConfirmHintText,
-                              errorText: _editedAdminUserData
-                                      .isNewPasswordConfirmValid
-                                  ? null
-                                  : AppLocalizations.of(context)!
-                                      .adminAccountEditPasswordConfirmInvalidText,
+                                textInputAction: TextInputAction.next,
+                                onChanged: (value) {
+                                  _editedAdminUserData.newPasswordConfirm =
+                                      value;
+                                  setState(() {});
+                                },
+                              ),
                             ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedAdminUserData.newPasswordConfirm = value;
-                              setState(() {});
-                            },
+                          ],
+                        ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .adminAccountEditNoteTitle),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .adminAccountEditNoteTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _noteTextFieldCtrl,
-                            keyboardType: TextInputType.multiline,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.noteSticky),
-                              border: OutlineInputBorder(),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _noteTextFieldCtrl,
+                              keyboardType: TextInputType.multiline,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.noteSticky),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedAdminUserData.editedData.note = value;
+                                setState(() {});
+                              },
                             ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedAdminUserData.editedData.note = value;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -1022,8 +1028,8 @@ class _AdminUserFormDialogState extends State<_AdminUserFormDialog> {
                             widget.onEditAdminUser?.call(_editedAdminUserData);
                           }
                         : null,
-                    child:
-                        Text(AppLocalizations.of(context)!.siteEditSaveButton),
+                    child: Text(
+                        AppLocalizations.of(context)!.adminAccountSaveButton),
                   ),
                 )
               ],

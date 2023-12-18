@@ -5,22 +5,26 @@ class VserveTabBarComponent extends StatelessWidget {
     super.key,
     required this.tabs,
     this.onTap,
+    this.controller,
   });
 
   final List<Widget> tabs;
   final Function(int)? onTap;
+  final TabController? controller;
 
   @override
   Widget build(BuildContext context) {
     const baseColor = Color(0xff975aff);
 
     return TabBar(
+      controller: controller,
       isScrollable: true,
       onTap: onTap,
       labelColor: baseColor,
       unselectedLabelColor: Colors.grey,
       indicatorColor: baseColor,
       tabs: tabs,
+      tabAlignment: TabAlignment.start,
     );
   }
 }

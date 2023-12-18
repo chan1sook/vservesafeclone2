@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import MongooseDelete from "mongoose-delete";
 
+export const USER_ROLES = [
+  "user",
+  "manager",
+  "admin",
+  "superadmin",
+  "developer",
+];
+
 const userSchema = new mongoose.Schema(
   {
     active: { type: Boolean, default: false },
@@ -8,7 +16,7 @@ const userSchema = new mongoose.Schema(
     hashedPw: { type: String, required: true, selected: false },
     role: {
       type: String,
-      enum: ["user", "manager", "admin", "superadmin", "developer"],
+      enum: USER_ROLES,
     },
     avatarUrl: { type: String, default: "" },
     actualName: { type: String, default: "" },

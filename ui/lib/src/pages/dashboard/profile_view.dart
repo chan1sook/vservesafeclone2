@@ -1,7 +1,6 @@
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +8,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:vservesafe/src/components/alert_component.dart';
+import 'package:vservesafe/src/components/scrollable_container.dart';
 import 'package:vservesafe/src/components/tabs_component.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/models/user_data.dart';
 import 'package:vservesafe/src/models/user_edit_data.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
 import 'package:vservesafe/src/services/api_service.dart';
+import 'package:vservesafe/src/utils/alert_dialog.dart';
 
 class ProfileDashboardView extends StatefulWidget {
   const ProfileDashboardView({
@@ -46,10 +46,6 @@ class _ProfileDashboardViewState extends State<ProfileDashboardView> {
   @override
   void initState() {
     super.initState();
-    if (!kIsWeb) {
-      ApiService.dio.interceptors.add(CookieManager(ApiService.cookieJar));
-    }
-
     developer.log("${widget.startPageIndex}", name: "Route Args");
   }
 
@@ -185,15 +181,14 @@ class _ProfileDashboardViewState extends State<ProfileDashboardView> {
 
     _isLoadingOpened = true;
 
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: SettingsController.isDebugMode,
-      builder: (BuildContext context) {
-        return LoadingAlertDialog(text: _progressText);
+    return showLoadingDialog(
+      context,
+      () {
+        _isLoadingOpened = false;
+        setState(() {});
       },
-    ).then((value) {
-      _isLoadingOpened = false;
-    });
+      _progressText,
+    );
   }
 
   Future<void> _showUpdateProfileFailedDialog(Object err) async {
@@ -295,354 +290,359 @@ class _ProfileEditTabViewState extends State<_ProfileEditTabView> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Table(
-            columnWidths: const {0: IntrinsicColumnWidth()},
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: const TableBorder(
-              horizontalInside: BorderSide(color: Colors.black12),
-              verticalInside: BorderSide(color: Colors.black12),
-            ),
-            children: [
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditAvatarTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      runSpacing: 7,
-                      spacing: 7,
-                      children: [
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: _editedUserData.newAvatarImage != null
-                              ? CircleAvatar(
-                                  backgroundImage: XFileImage(
-                                      _editedUserData.newAvatarImage!),
-                                )
-                              : CircleAvatar(
-                                  backgroundImage: NetworkImage(_editedUserData
-                                      .editedData.serverAvatarUrl),
-                                ),
-                        ),
-                        OutlinedButton(
-                          onPressed: _pickImage,
-                          child: Text(AppLocalizations.of(context)!
-                              .profileEditChangeAvatarButton),
-                        ),
-                        if (_editedUserData.newAvatarImage != null)
+      child: ScrollableContainerComponent(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Table(
+              columnWidths: const {0: IntrinsicColumnWidth()},
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              border: const TableBorder(
+                horizontalInside: BorderSide(color: Colors.black12),
+                verticalInside: BorderSide(color: Colors.black12),
+              ),
+              children: [
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditAvatarTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 7,
+                        spacing: 7,
+                        children: [
+                          SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: _editedUserData.newAvatarImage != null
+                                ? CircleAvatar(
+                                    backgroundImage: XFileImage(
+                                        _editedUserData.newAvatarImage!),
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        _editedUserData
+                                            .editedData.serverAvatarUrl),
+                                  ),
+                          ),
                           OutlinedButton(
-                            onPressed: _revertPickImage,
+                            onPressed: _pickImage,
                             child: Text(AppLocalizations.of(context)!
-                                .profileEditRevertAvatarButton),
+                                .profileEditChangeAvatarButton),
                           ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(AppLocalizations.of(context)!
-                        .profileEditChangePasswordTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
+                          if (_editedUserData.newAvatarImage != null)
                             OutlinedButton(
-                              onPressed: _toggleResetPasswordPanel,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const FaIcon(FontAwesomeIcons.key, size: 14),
-                                  const SizedBox(width: 7),
-                                  Text(AppLocalizations.of(context)!
-                                      .profileEditChangePasswordButton),
-                                ],
-                              ),
-                            ),
-                            if (_editedUserData.needEditPassword) ...[
-                              const SizedBox(width: 14),
-                              OutlinedButton(
-                                onPressed: _clearChangePassword,
-                                child: Text(AppLocalizations.of(context)!
-                                    .profileEditChangePasswordRevertButton),
-                              ),
-                            ],
-                          ],
-                        ),
-                        if (_showChangePassword) ...[
-                          const SizedBox(height: 14),
-                          TextField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              labelText: AppLocalizations.of(context)!
-                                  .profileEditOldPasswordTextFieldLabel,
-                              border: const OutlineInputBorder(),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedUserData.oldPassword = value;
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(height: 14),
-                          TextField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              labelText: AppLocalizations.of(context)!
-                                  .profileEditNewPasswordTextFieldLabel,
-                              hintText: AppLocalizations.of(context)!
-                                  .profileEditNewPasswordTextFieldHint,
-                              border: const OutlineInputBorder(),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedUserData.newPassword = value;
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(height: 14),
-                          TextField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              labelText: AppLocalizations.of(context)!
-                                  .profileEditNewPasswordConfirmTextFieldLabel,
-                              hintText: AppLocalizations.of(context)!
-                                  .profileEditNewPasswordConfirmTextFieldHint,
-                              border: const OutlineInputBorder(),
-                              errorText: _editedUserData
-                                      .isNewPasswordConfirmValid
-                                  ? null
-                                  : AppLocalizations.of(context)!
-                                      .profileEditNewPasswordConfirmInvalidText,
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedUserData.newPasswordConfirm = value;
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(height: 14),
-                          Center(
-                            child: OutlinedButton(
-                              onPressed: _applyChangePassword,
+                              onPressed: _revertPickImage,
                               child: Text(AppLocalizations.of(context)!
-                                  .profileEditChangePasswordButton),
+                                  .profileEditRevertAvatarButton),
                             ),
-                          ),
                         ],
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditUsernameTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _accountNameTextFieldCtrl,
-                      readOnly: true,
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.userCheck),
-                        filled: true,
-                        fillColor: Color(0x18000000),
-                        border: OutlineInputBorder(),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(AppLocalizations.of(context)!
-                        .profileEditActualNameTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _actualNameTextFieldCtrl,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.user),
-                        border: OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        _editedUserData.editedData.actualName = value;
-                        setState(() {});
-                      },
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditChangePasswordTitle),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(AppLocalizations.of(context)!
-                        .profileEditContractEmailTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _contractEmailTextFieldCtrl,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.envelope),
-                        border: OutlineInputBorder(),
+                    Padding(
+                      padding: tablePadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              OutlinedButton(
+                                onPressed: _toggleResetPasswordPanel,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const FaIcon(FontAwesomeIcons.key,
+                                        size: 14),
+                                    const SizedBox(width: 7),
+                                    Text(AppLocalizations.of(context)!
+                                        .profileEditChangePasswordButton),
+                                  ],
+                                ),
+                              ),
+                              if (_editedUserData.needEditPassword) ...[
+                                const SizedBox(width: 14),
+                                OutlinedButton(
+                                  onPressed: _clearChangePassword,
+                                  child: Text(AppLocalizations.of(context)!
+                                      .profileEditChangePasswordRevertButton),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (_showChangePassword) ...[
+                            const SizedBox(height: 14),
+                            TextField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                labelText: AppLocalizations.of(context)!
+                                    .profileEditOldPasswordTextFieldLabel,
+                                border: const OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedUserData.oldPassword = value;
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(height: 14),
+                            TextField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                labelText: AppLocalizations.of(context)!
+                                    .profileEditNewPasswordTextFieldLabel,
+                                hintText: AppLocalizations.of(context)!
+                                    .profileEditNewPasswordTextFieldHint,
+                                border: const OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedUserData.newPassword = value;
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(height: 14),
+                            TextField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                labelText: AppLocalizations.of(context)!
+                                    .profileEditNewPasswordConfirmTextFieldLabel,
+                                hintText: AppLocalizations.of(context)!
+                                    .profileEditNewPasswordConfirmTextFieldHint,
+                                border: const OutlineInputBorder(),
+                                errorText: _editedUserData
+                                        .isNewPasswordConfirmValid
+                                    ? null
+                                    : AppLocalizations.of(context)!
+                                        .profileEditNewPasswordConfirmInvalidText,
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedUserData.newPasswordConfirm = value;
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(height: 14),
+                            Center(
+                              child: OutlinedButton(
+                                onPressed: _applyChangePassword,
+                                child: Text(AppLocalizations.of(context)!
+                                    .profileEditChangePasswordButton),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        _editedUserData.editedData.contractEmail = value;
-                        setState(() {});
-                      },
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditPhoneTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _phoneNumberTextFieldCtrl,
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.phone),
-                        border: OutlineInputBorder(),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditUsernameTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _accountNameTextFieldCtrl,
+                        readOnly: true,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.userCheck),
+                          filled: true,
+                          fillColor: Color(0x12000000),
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        _editedUserData.editedData.phoneNumber = value;
-                        setState(() {});
-                      },
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditPositionTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _positionTextFieldCtrl,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.suitcase),
-                        border: OutlineInputBorder(),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditActualNameTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _actualNameTextFieldCtrl,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.user),
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          _editedUserData.editedData.actualName = value;
+                          setState(() {});
+                        },
                       ),
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        _editedUserData.editedData.position = value;
-                        setState(() {});
-                      },
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditAddressTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _addressTextFieldCtrl,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.house),
-                        border: OutlineInputBorder(),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditContractEmailTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _contractEmailTextFieldCtrl,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.envelope),
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          _editedUserData.editedData.contractEmail = value;
+                          setState(() {});
+                        },
                       ),
-                      onChanged: (value) {
-                        _editedUserData.editedData.address = value;
-                        setState(() {});
-                      },
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditNotesTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: TextField(
-                      controller: _noteTextFieldCtrl,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        prefixIcon: Icon(FontAwesomeIcons.noteSticky),
-                        border: OutlineInputBorder(),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditPhoneTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _phoneNumberTextFieldCtrl,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.phone),
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          _editedUserData.editedData.phoneNumber = value;
+                          setState(() {});
+                        },
                       ),
-                      onChanged: (value) {
-                        _editedUserData.editedData.note = value;
-                        setState(() {});
-                      },
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: _editedUserData.isFormValid
-                  ? () {
-                      widget.onSubmitForm?.call(_editedUserData);
-                    }
-                  : null,
-              child: Text(AppLocalizations.of(context)!.profileEditSaveButton),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditPositionTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _positionTextFieldCtrl,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.suitcase),
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          _editedUserData.editedData.position = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditAddressTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _addressTextFieldCtrl,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.house),
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          _editedUserData.editedData.address = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditNotesTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: TextField(
+                        controller: _noteTextFieldCtrl,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(FontAwesomeIcons.noteSticky),
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          _editedUserData.editedData.note = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            Center(
+              child: ElevatedButton(
+                onPressed: _editedUserData.isFormValid
+                    ? () {
+                        widget.onSubmitForm?.call(_editedUserData);
+                      }
+                    : null,
+                child:
+                    Text(AppLocalizations.of(context)!.profileEditSaveButton),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -691,138 +691,140 @@ class _ProfileInfoTabView extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Table(
-            columnWidths: const {0: IntrinsicColumnWidth()},
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: const TableBorder(
-              horizontalInside: BorderSide(color: Colors.black12),
-              verticalInside: BorderSide(color: Colors.black12),
-            ),
-            children: [
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditAvatarTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: CircleAvatar(
-                            backgroundImage: userController.userData != null
-                                ? NetworkImage(
-                                    userController.userData!.serverAvatarUrl)
-                                : null,
-                          ),
-                        ),
-                      ],
+      child: ScrollableContainerComponent(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Table(
+              columnWidths: const {0: IntrinsicColumnWidth()},
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              border: const TableBorder(
+                horizontalInside: BorderSide(color: Colors.black12),
+                verticalInside: BorderSide(color: Colors.black12),
+              ),
+              children: [
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditAvatarTitle),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditUsernameTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.username ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(AppLocalizations.of(context)!
-                        .profileEditActualNameTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.actualName ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(AppLocalizations.of(context)!
-                        .profileEditContractEmailTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.contractEmail ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditPhoneTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.phoneNumber ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditPositionTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.position ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditAddressTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.address ?? ""),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(
-                        AppLocalizations.of(context)!.profileEditNotesTitle),
-                  ),
-                  Padding(
-                    padding: tablePadding,
-                    child: Text(userController.userData?.note ?? ""),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                    Padding(
+                      padding: tablePadding,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: CircleAvatar(
+                              backgroundImage: userController.userData != null
+                                  ? NetworkImage(
+                                      userController.userData!.serverAvatarUrl)
+                                  : null,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditUsernameTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.username ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditActualNameTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.actualName ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditContractEmailTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.contractEmail ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditPhoneTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.phoneNumber ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditPositionTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.position ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(AppLocalizations.of(context)!
+                          .profileEditAddressTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.address ?? ""),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(
+                          AppLocalizations.of(context)!.profileEditNotesTitle),
+                    ),
+                    Padding(
+                      padding: tablePadding,
+                      child: Text(userController.userData?.note ?? ""),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

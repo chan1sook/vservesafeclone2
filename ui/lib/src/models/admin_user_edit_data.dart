@@ -1,13 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:vservesafe/src/models/user_data.dart';
 
-class VserveEditAdminUserData {
+class VserveEditUserDataAdmin {
   late VserveUserData editedData;
   bool needEditPassword = false;
   String newPassword = "";
   String newPasswordConfirm = "";
 
-  VserveEditAdminUserData(VserveUserData original) {
+  VserveEditUserDataAdmin(VserveUserData original) {
     editedData = original.clone();
   }
 
@@ -23,9 +23,10 @@ class VserveEditAdminUserData {
     return isUsernameValid && changePwValid;
   }
 
-  Map<String, dynamic> toApiData({bool? withId = false}) {
+  Map<String, dynamic> toApiData({bool? withId = false, String? siteId}) {
     return {
       if (withId == true) "id": editedData.id,
+      if (siteId != null) "siteId": siteId,
       "active": editedData.active,
       "role": editedData.role,
       "actualName": editedData.actualName,

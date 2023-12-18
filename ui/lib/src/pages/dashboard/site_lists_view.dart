@@ -1,9 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:developer' as developer;
 
 import 'package:collection/collection.dart';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/foundation.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -12,9 +15,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vservesafe/src/components/alert_component.dart';
+import 'package:vservesafe/src/components/icon_button_component.dart';
+import 'package:vservesafe/src/components/langswitch_component.dart';
 import 'package:vservesafe/src/components/pagination_component.dart';
+import 'package:vservesafe/src/components/scrollable_container.dart';
 import 'package:vservesafe/src/components/status_item_component.dart';
+import 'package:vservesafe/src/components/quill_editor_component.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
 import 'package:vservesafe/src/models/site_data.dart';
@@ -22,6 +28,7 @@ import 'package:vservesafe/src/models/site_edit_data.dart';
 import 'package:vservesafe/src/models/user_data.dart';
 import 'package:vservesafe/src/services/api_service.dart';
 import 'package:vservesafe/src/services/settings_service.dart';
+import 'package:vservesafe/src/utils/alert_dialog.dart';
 
 class SiteListsDashboardView extends StatefulWidget {
   const SiteListsDashboardView({
@@ -45,7 +52,7 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
   int _pageSize = 10;
 
   int? _sortColumnIndex;
-  bool _sortAssending = true;
+  bool _sortAscending = true;
 
   final List<VserveSiteData> _sites = [];
   final List<VserveUserData> _admins = [];
@@ -103,8 +110,8 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
       );
 
       List<VserveUserData> newUsers = [];
-      final sitesData = response.data["users"] as List<dynamic>;
-      for (final ele in sitesData) {
+      final usersData = response.data["users"] as List<dynamic>;
+      for (final ele in usersData) {
         if (ele is Map<String, dynamic>) {
           newUsers.add(VserveUserData.parseFromRawData(ele));
         }
@@ -162,35 +169,49 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
                               BoxConstraints(minWidth: constraints.minWidth),
                           child: DataTable(
                             sortColumnIndex: _sortColumnIndex,
-                            sortAscending: _sortAssending,
+                            sortAscending: _sortAscending,
                             headingTextStyle:
                                 const TextStyle(fontWeight: FontWeight.bold),
                             columns: [
                               DataColumn(
-                                  label: Text(AppLocalizations.of(context)!
-                                      .actionTitle)),
+                                label: Text(
+                                    AppLocalizations.of(context)!.actionTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.actionTitle,
+                              ),
                               if (SettingsService.showItemId)
                                 DataColumn(
                                   label: Text(
                                       AppLocalizations.of(context)!.idTitle),
+                                  tooltip:
+                                      AppLocalizations.of(context)!.idTitle,
                                   onSort: _setSortColumn,
                                 ),
                               DataColumn(
                                 label: Text(
                                     AppLocalizations.of(context)!.statusTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.statusTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
                                 label: Text(AppLocalizations.of(context)!
                                     .siteListsNameTitle),
+                                tooltip: AppLocalizations.of(context)!
+                                    .siteListsNameTitle,
                                 onSort: _setSortColumn,
                               ),
                               DataColumn(
-                                  label: Text(AppLocalizations.of(context)!
-                                      .siteListsNoteTitle)),
+                                label: Text(AppLocalizations.of(context)!
+                                    .siteListsNoteTitle),
+                                tooltip: AppLocalizations.of(context)!
+                                    .siteListsNoteTitle,
+                              ),
                               DataColumn(
                                 label: Text(
                                     AppLocalizations.of(context)!.createdTitle),
+                                tooltip:
+                                    AppLocalizations.of(context)!.createdTitle,
                                 onSort: _setSortColumn,
                               ),
                             ],
@@ -200,39 +221,21 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            ElevatedButton(
+                                            IconButtonComponent(
+                                              icon: FontAwesomeIcons.pencil,
+                                              color: Colors.orange,
+                                              width: 32,
                                               onPressed: () {
                                                 _showEditSiteDialog(ele);
                                               },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: const CircleBorder(),
-                                                minimumSize: Size.zero,
-                                                padding:
-                                                    const EdgeInsets.all(18),
-                                                backgroundColor: Colors.grey,
-                                              ),
-                                              child: const Icon(
-                                                FontAwesomeIcons.pencil,
-                                                color: Colors.white,
-                                                size: 14,
-                                              ),
                                             ),
-                                            ElevatedButton(
+                                            const SizedBox(width: 7),
+                                            IconButtonComponent(
+                                              icon: FontAwesomeIcons.trash,
+                                              width: 32,
                                               onPressed: () {
                                                 _showDeleteSiteWarning(ele);
                                               },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: const CircleBorder(),
-                                                minimumSize: Size.zero,
-                                                padding:
-                                                    const EdgeInsets.all(18),
-                                                backgroundColor: Colors.orange,
-                                              ),
-                                              child: const Icon(
-                                                FontAwesomeIcons.trash,
-                                                color: Colors.white,
-                                                size: 14,
-                                              ),
                                             ),
                                           ],
                                         ),
@@ -298,12 +301,12 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
   void _setSortColumn(int columnIndex, bool assending) {
     if (_sortColumnIndex != columnIndex) {
       _sortColumnIndex = columnIndex;
-      _sortAssending = assending;
-    } else if (_sortAssending == true) {
-      _sortAssending = false;
+      _sortAscending = assending;
+    } else if (_sortAscending == true) {
+      _sortAscending = false;
     } else {
       _sortColumnIndex = null;
-      _sortAssending = true;
+      _sortAscending = true;
     }
 
     _sortSites();
@@ -328,36 +331,36 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
 
   void _sortSites() {
     final column = _sortIndexToField(_sortColumnIndex);
-    developer.log("$_sortColumnIndex => $column ($_sortAssending}",
+    developer.log("$_sortColumnIndex => $column ($_sortAscending)",
         name: "Sort");
 
     switch (column) {
       case "id":
         _sites.sort((a, b) =>
-            _sortAssending ? a.id.compareTo(b.id) : b.id.compareTo(a.id));
+            _sortAscending ? a.id.compareTo(b.id) : b.id.compareTo(a.id));
         break;
       case "active":
         _sites.sort((a, b) {
           if (a.active & !b.active) {
-            return _sortAssending ? -1 : 1;
+            return _sortAscending ? -1 : 1;
           } else if (!a.active & b.active) {
-            return _sortAssending ? 1 : -1;
+            return _sortAscending ? 1 : -1;
           }
           return 0;
         });
         break;
       case "name":
-        _sites.sort((a, b) => _sortAssending
+        _sites.sort((a, b) => _sortAscending
             ? a.name.compareTo(b.name)
             : b.name.compareTo(a.name));
         break;
       case "note":
-        _sites.sort((a, b) => _sortAssending
+        _sites.sort((a, b) => _sortAscending
             ? a.note.compareTo(b.note)
             : b.note.compareTo(a.note));
         break;
       case "createdAt":
-        _sites.sort((a, b) => _sortAssending
+        _sites.sort((a, b) => _sortAscending
             ? a.createdAt.compareTo(b.createdAt)
             : b.createdAt.compareTo(a.createdAt));
         break;
@@ -383,6 +386,7 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return _SiteFormDialog(
+          settingsController: widget.settingsController,
           usersData: _admins,
           onEditSite: _addSite,
         );
@@ -391,17 +395,39 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
   }
 
   Future<void> _showEditSiteDialog(VserveSiteData siteData) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return _SiteFormDialog(
-          originalData: siteData,
-          usersData: _admins,
-          onEditSite: _editSite,
-        );
-      },
-    );
+    _showLoadingDialog();
+
+    VserveSiteData fullData = siteData;
+
+    try {
+      final response = await ApiService.dio.get(
+        "${ApiService.baseUrlPath}/site/${siteData.id}",
+      );
+
+      final usersData = response.data["site"] as Map<String, dynamic>;
+      fullData = VserveSiteData.parseFromRawData(usersData);
+    } catch (err) {
+      developer.log(err.toString(), name: "Site Full Data");
+    }
+
+    if (_isLoadingOpened && context.mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+
+    if (context.mounted) {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return _SiteFormDialog(
+            settingsController: widget.settingsController,
+            originalData: fullData,
+            usersData: _admins,
+            onEditSite: _editSite,
+          );
+        },
+      );
+    }
   }
 
   Future<void> _showDeleteSiteWarning(VserveSiteData siteData) async {
@@ -617,15 +643,14 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
 
     _isLoadingOpened = true;
 
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: SettingsController.isDebugMode,
-      builder: (BuildContext context) {
-        return LoadingAlertDialog(text: _progressText);
+    return showLoadingDialog(
+      context,
+      () {
+        _isLoadingOpened = false;
+        setState(() {});
       },
-    ).then((value) {
-      _isLoadingOpened = false;
-    });
+      _progressText,
+    );
   }
 
   Future<void> _showSuccessDialog(String title) async {
@@ -680,8 +705,14 @@ class _SiteListsDashboardViewState extends State<SiteListsDashboardView> {
 }
 
 class _SiteFormDialog extends StatefulWidget {
-  const _SiteFormDialog({this.originalData, this.usersData, this.onEditSite});
+  const _SiteFormDialog({
+    required this.settingsController,
+    this.originalData,
+    this.usersData,
+    this.onEditSite,
+  });
 
+  final SettingsController settingsController;
   final VserveSiteData? originalData;
   final List<VserveUserData>? usersData;
   final Function(VserveEditSiteData)? onEditSite;
@@ -702,11 +733,19 @@ class _SiteFormDialogState extends State<_SiteFormDialog> {
   final TextEditingController _phoneTextFieldCtrl = TextEditingController();
   final TextEditingController _noteTextFieldCtrl = TextEditingController();
 
-  bool _fullScreen = false;
+  final QuillController _welcomeScreenEnController = QuillController.basic();
+  final QuillController _welcomeScreenThController = QuillController.basic();
 
+  Locale _selectedLocale = SettingsController.supportedLocales[0];
+  StreamSubscription? _welcomeEnSubscription;
+  StreamSubscription? _welcomeThSubscription;
+
+  bool _fullScreen = false;
   @override
   void initState() {
     super.initState();
+
+    _selectedLocale = widget.settingsController.locale;
 
     if (widget.originalData != null) {
       _editedSiteData.editedData = widget.originalData!.clone();
@@ -716,6 +755,31 @@ class _SiteFormDialogState extends State<_SiteFormDialog> {
     _contractEmailTextFieldCtrl.text = _editedSiteData.editedData.contractEmail;
     _phoneTextFieldCtrl.text = _editedSiteData.editedData.phoneNumber;
     _noteTextFieldCtrl.text = _editedSiteData.editedData.note;
+
+    try {
+      _welcomeScreenEnController.document = Document.fromJson(
+          jsonDecode(_editedSiteData.editedData.welcomeScreenEn));
+    } catch (err) {
+      developer.log("parse error: _welcomeScreenEnController", name: "Quill");
+    }
+
+    try {
+      _welcomeScreenThController.document = Document.fromJson(
+          jsonDecode(_editedSiteData.editedData.welcomeScreenTh));
+    } catch (err) {
+      developer.log("parse error: _welcomeScreenThController", name: "Quill");
+    }
+
+    _welcomeEnSubscription =
+        _welcomeScreenEnController.document.changes.listen((event) {
+      _editedSiteData.editedData.welcomeScreenEn =
+          jsonEncode(_welcomeScreenEnController.document.toDelta().toJson());
+    });
+    _welcomeThSubscription =
+        _welcomeScreenThController.document.changes.listen((event) {
+      _editedSiteData.editedData.welcomeScreenTh =
+          jsonEncode(_welcomeScreenThController.document.toDelta().toJson());
+    });
   }
 
   @override
@@ -763,211 +827,252 @@ class _SiteFormDialogState extends State<_SiteFormDialog> {
                     ),
                   ],
                 ),
-                Table(
-                  columnWidths: const {0: IntrinsicColumnWidth()},
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: const TableBorder(
-                    horizontalInside: BorderSide(color: Colors.black12),
-                    verticalInside: BorderSide(color: Colors.black12),
-                  ),
-                  children: [
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(
-                              AppLocalizations.of(context)!.siteEditLogoTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            runSpacing: 7,
-                            spacing: 7,
-                            children: [
-                              SizedBox(
-                                width: 48,
-                                height: 48,
-                                child: _editedSiteData.newLogoImage != null
-                                    ? CircleAvatar(
-                                        backgroundImage: XFileImage(
-                                            _editedSiteData.newLogoImage!),
-                                      )
-                                    : CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            _editedSiteData
-                                                .editedData.serverLogoUrl),
-                                      ),
-                              ),
-                              OutlinedButton(
-                                onPressed: _pickImage,
-                                child: Text(AppLocalizations.of(context)!
-                                    .siteEditChangeLogoButton),
-                              ),
-                              if (_editedSiteData.newLogoImage != null)
-                                OutlinedButton(
-                                  onPressed: _revertPickImage,
-                                  child: Text(AppLocalizations.of(context)!
-                                      .siteEditRevertLogoButton),
+                ScrollableContainerComponent(
+                  child: Table(
+                    columnWidths: const {0: IntrinsicColumnWidth()},
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    border: const TableBorder(
+                      horizontalInside: BorderSide(color: Colors.black12),
+                      verticalInside: BorderSide(color: Colors.black12),
+                    ),
+                    children: [
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditLogoTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              runSpacing: 7,
+                              spacing: 7,
+                              children: [
+                                SizedBox(
+                                  width: 48,
+                                  height: 48,
+                                  child: _editedSiteData.newLogoImage != null
+                                      ? CircleAvatar(
+                                          backgroundImage: XFileImage(
+                                              _editedSiteData.newLogoImage!),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              _editedSiteData
+                                                  .editedData.serverLogoUrl),
+                                        ),
                                 ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(
-                              AppLocalizations.of(context)!.siteEditNameTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _nameTextFieldCtrl,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.suitcase),
-                              border: OutlineInputBorder(),
+                                OutlinedButton(
+                                  onPressed: _pickImage,
+                                  child: Text(AppLocalizations.of(context)!
+                                      .siteEditChangeLogoButton),
+                                ),
+                                if (_editedSiteData.newLogoImage != null)
+                                  OutlinedButton(
+                                    onPressed: _revertPickImage,
+                                    child: Text(AppLocalizations.of(context)!
+                                        .siteEditRevertLogoButton),
+                                  ),
+                              ],
                             ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedSiteData.editedData.name = value;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .siteEditEmailContractTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _contractEmailTextFieldCtrl,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.envelope),
-                              border: OutlineInputBorder(),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditNameTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _nameTextFieldCtrl,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.suitcase),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedSiteData.editedData.name = value;
+                                setState(() {});
+                              },
                             ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedSiteData.editedData.contractEmail = value;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(
-                              AppLocalizations.of(context)!.siteEditPhoneTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _phoneTextFieldCtrl,
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.phone),
-                              border: OutlineInputBorder(),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditEmailContractTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _contractEmailTextFieldCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.envelope),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedSiteData.editedData.contractEmail =
+                                    value;
+                                setState(() {});
+                              },
                             ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedSiteData.editedData.phoneNumber = value;
-                              setState(() {});
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: tablePadding,
-                          child: Text(AppLocalizations.of(context)!
-                              .siteEditAdminsTitle),
-                        ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditPhoneTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _phoneTextFieldCtrl,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.phone),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedSiteData.editedData.phoneNumber = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditAdminsTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                MultiSelectDialogField<String>(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  initialValue: _editedSiteData
+                                      .editedData.admins
+                                      .where((ele) =>
+                                          (widget.usersData ?? [])
+                                              .firstWhereOrNull(
+                                                  (ele2) => ele2.id == ele) !=
+                                          null)
+                                      .toList(),
+                                  searchable: true,
+                                  items: (widget.usersData ?? []).map((e) {
+                                    return MultiSelectItem(e.id,
+                                        "${e.actualName} - ${e.username}");
+                                  }).toList(),
+                                  listType: MultiSelectListType.CHIP,
+                                  chipDisplay: MultiSelectChipDisplay.none(),
+                                  onConfirm: (values) {
+                                    _editedSiteData.editedData.admins = values;
+                                    setState(() {});
+                                  },
+                                ),
+                                const SizedBox(height: 7),
+                                MultiSelectChipDisplay<String>(
+                                  items: _editedSiteData.editedData.admins
+                                      .map((id) {
+                                    VserveUserData? target =
+                                        (widget.usersData ?? [])
+                                            .firstWhereOrNull(
+                                                (ele) => ele.id == id);
+                                    if (target != null) {
+                                      return MultiSelectItem(id,
+                                          "${target.actualName} - ${target.username}");
+                                    } else {
+                                      return MultiSelectItem(id, id);
+                                    }
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(children: [
                         Padding(
                           padding: tablePadding,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              MultiSelectDialogField<String>(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                searchable: true,
-                                items: (widget.usersData ?? []).map((e) {
-                                  return MultiSelectItem(
-                                      e.id, "${e.actualName} - ${e.username}");
-                                }).toList(),
-                                listType: MultiSelectListType.CHIP,
-                                chipDisplay: MultiSelectChipDisplay.none(),
-                                onConfirm: (values) {
-                                  _editedSiteData.editedData.admins = values;
+                              Text(AppLocalizations.of(context)!
+                                  .siteEditWelcomeScreenTitle),
+                              const SizedBox(height: 14),
+                              DashboardLanguageSwitchComponent(
+                                selectedLocale: _selectedLocale,
+                                onSwitchLanguage: (locale) {
+                                  _selectedLocale = locale;
                                   setState(() {});
                                 },
-                              ),
-                              const SizedBox(height: 7),
-                              MultiSelectChipDisplay<String>(
-                                items:
-                                    _editedSiteData.editedData.admins.map((id) {
-                                  VserveUserData? target = (widget.usersData ??
-                                          [])
-                                      .firstWhereOrNull((ele) => ele.id == id);
-                                  if (target != null) {
-                                    return MultiSelectItem(id,
-                                        "${target.actualName} - ${target.username}");
-                                  } else {
-                                    return MultiSelectItem(id, id);
-                                  }
-                                }).toList(),
-                              ),
+                              )
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
+                        Container(
+                          height: 500,
                           padding: tablePadding,
-                          child: Text(
-                              AppLocalizations.of(context)!.siteEditNotesTitle),
-                        ),
-                        Padding(
-                          padding: tablePadding,
-                          child: TextField(
-                            controller: _noteTextFieldCtrl,
-                            keyboardType: TextInputType.multiline,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              prefixIcon: Icon(FontAwesomeIcons.noteSticky),
-                              border: OutlineInputBorder(),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            onChanged: (value) {
-                              _editedSiteData.editedData.note = value;
-                              setState(() {});
-                            },
+                          decoration: const BoxDecoration(),
+                          clipBehavior: Clip.hardEdge,
+                          child: QuillEditorComponent(
+                            controller: _welcomeCtrlLocale(),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ]),
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: tablePadding,
+                            child: Text(AppLocalizations.of(context)!
+                                .siteEditNotesTitle),
+                          ),
+                          Padding(
+                            padding: tablePadding,
+                            child: TextField(
+                              controller: _noteTextFieldCtrl,
+                              keyboardType: TextInputType.multiline,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                prefixIcon: Icon(FontAwesomeIcons.noteSticky),
+                                border: OutlineInputBorder(),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                _editedSiteData.editedData.note = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -1028,5 +1133,19 @@ class _SiteFormDialogState extends State<_SiteFormDialog> {
   void _revertPickImage() {
     _editedSiteData.newLogoImage = null;
     setState(() => {});
+  }
+
+  QuillController _welcomeCtrlLocale() {
+    if (_selectedLocale.languageCode.startsWith("th")) {
+      return _welcomeScreenThController;
+    }
+    return _welcomeScreenEnController;
+  }
+
+  @override
+  void dispose() {
+    _welcomeEnSubscription?.cancel();
+    _welcomeThSubscription?.cancel();
+    super.dispose();
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:vservesafe/src/components/grid_form_item_component.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
 
@@ -52,36 +55,26 @@ class ShecupExamDashboardView extends StatelessWidget {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                  child: GridView.builder(
-                    itemCount: _examsList.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 4),
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.only(left: 14),
-                          ),
-                          onPressed: () {},
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(7),
-                              ),
-                            ),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints.expand(),
-                              child: Center(
-                                child: Text(_examsList[index]),
-                              ),
-                            ),
-                          ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth - 28;
+                      final colCount = math.max((width / 350), 1).toInt();
+
+                      return GridView.builder(
+                        itemCount: _examsList.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: colCount,
+                          mainAxisExtent: 75,
                         ),
+                        itemBuilder: (context, index) {
+                          return GridFormItemComponent(
+                            leadColor: Colors.red,
+                            text: _examsList[index],
+                            onSelectItem: () {},
+                          );
+                        },
                       );
                     },
                   ),

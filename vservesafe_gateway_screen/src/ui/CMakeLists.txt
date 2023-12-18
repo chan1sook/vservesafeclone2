@@ -1,0 +1,25 @@
+SET(SOURCES screens/ui_SplashScreen.c
+    screens/ui_HomeScreen.c
+    screens/ui_OptionScreen.c
+    screens/ui_InputScreen.c
+    screens/ui_AlertScreen.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    images/ui_img_142471982.c
+    images/ui_img_wifi_png.c
+    images/ui_img_wifi_off_png.c
+    images/ui_img_bluetooth_png.c
+    images/ui_img_clouds_png.c
+    images/ui_img_cloud_slash_png.c
+    images/ui_img_bell_png.c
+    images/ui_img_bell_slash_png.c
+    images/ui_img_gear_png.c
+    images/ui_img_chevron_right_png.c
+    images/ui_img_asterisk_png.c
+    images/ui_img_check_png.c
+    images/ui_img_arrow_left_png.c
+    images/ui_img_arrow_cc_png.c
+    images/ui_img_x_png.c)
+
+add_library(ui ${SOURCES})

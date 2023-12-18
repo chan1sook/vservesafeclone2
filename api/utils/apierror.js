@@ -56,6 +56,25 @@ export const APISelfUserProtection = new APIError(
   11
 );
 
+export const APIInvalidId = new APIError("Invalid Id", 400, 12);
+export const APIDeviceTargetNotExistsError = new APIError(
+  "Device target not found",
+  400,
+  13
+);
+
+export const APISiteUserMaximumLimit = new APIError(
+  "Site User Maximum Limit",
+  400,
+  14
+);
+
+export const APIShedeinResponseTargetNotExistsError = new APIError(
+  "Shedein Form Response not found",
+  400,
+  15
+);
+
 export const APIErrorCodes = Object.freeze({
   1: APILoginAuthFailedError,
   2: APIMissingFormParameterError,
@@ -68,4 +87,8 @@ export const APIErrorCodes = Object.freeze({
   9: APILackPermissionError,
   10: APIUserTargetNotExistsError,
   11: APISelfUserProtection,
+  12: APIInvalidId,
+  13: APIDeviceTargetNotExistsError,
+  14: APISiteUserMaximumLimit,
+  15: APIShedeinResponseTargetNotExistsError,
 });

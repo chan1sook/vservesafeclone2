@@ -1,10 +1,6 @@
 import redis from "redis";
 import { error, log } from "../utils/logging.js";
 
-function redisDefaultCallback() {
-  log(`Connected`, { name: "Redis" });
-}
-
 let redisClient = redis.createClient();
 
 export function getRedisClient() {

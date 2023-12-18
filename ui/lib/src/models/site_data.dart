@@ -7,8 +7,17 @@ class VserveSiteData {
   String logoUrl = "";
   String contractEmail = "";
   String phoneNumber = "";
-  List<String> admins = [];
+  String welcomeScreenEn = "";
+  String welcomeScreenTh = "";
   String note = "";
+  List<String> admins = [];
+  List<String> managers = [];
+  List<String> users = [];
+  int managerUserCap = 10;
+  int userUserCap = 100;
+  bool isAdmin = false;
+  bool isManager = false;
+  bool isUser = false;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
@@ -20,7 +29,16 @@ class VserveSiteData {
     String? contractEmail,
     String? phoneNumber,
     List<String>? admins,
+    List<String>? managers,
+    List<String>? users,
+    String? welcomeScreenEn,
+    String? welcomeScreenTh,
     String? note,
+    int? managerUserCap,
+    int? userUserCap,
+    bool? isAdmin,
+    bool? isManager,
+    bool? isUser,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -45,8 +63,35 @@ class VserveSiteData {
     if (admins != null) {
       this.admins = List.from(admins);
     }
+    if (managers != null) {
+      this.managers = List.from(managers);
+    }
+    if (users != null) {
+      this.users = List.from(users);
+    }
+    if (welcomeScreenEn != null) {
+      this.welcomeScreenEn = welcomeScreenEn;
+    }
+    if (welcomeScreenTh != null) {
+      this.welcomeScreenTh = welcomeScreenTh;
+    }
     if (note != null) {
       this.note = note;
+    }
+    if (managerUserCap != null) {
+      this.managerUserCap = managerUserCap;
+    }
+    if (userUserCap != null) {
+      this.userUserCap = userUserCap;
+    }
+    if (isAdmin != null) {
+      this.isAdmin = isAdmin;
+    }
+    if (isManager != null) {
+      this.isManager = isManager;
+    }
+    if (isUser != null) {
+      this.isUser = isUser;
     }
     if (createdAt != null) {
       this.createdAt = createdAt;
@@ -81,7 +126,19 @@ class VserveSiteData {
       logoUrl: logoUrl,
       contractEmail: contractEmail,
       phoneNumber: phoneNumber,
+      welcomeScreenEn: welcomeScreenEn,
+      welcomeScreenTh: welcomeScreenTh,
       note: note,
+      admins: List.from(admins),
+      managers: List.from(managers),
+      users: List.from(users),
+      managerUserCap: managerUserCap,
+      userUserCap: userUserCap,
+      isAdmin: isAdmin,
+      isManager: isManager,
+      isUser: isUser,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 
@@ -105,8 +162,56 @@ class VserveSiteData {
     if (data["phoneNumber"] is String) {
       result.phoneNumber = data["phoneNumber"];
     }
+    if (data["welcomeScreenEn"] is String) {
+      result.welcomeScreenEn = data["welcomeScreenEn"];
+    }
+    if (data["welcomeScreenTh"] is String) {
+      result.welcomeScreenTh = data["welcomeScreenTh"];
+    }
     if (data["note"] is String) {
       result.note = data["note"];
+    }
+    if (data["admins"] is List) {
+      List<String> admins = [];
+      for (final ele in data["admins"]) {
+        if (ele is String) {
+          admins.add(ele);
+        }
+      }
+      result.admins = admins;
+    }
+    if (data["managers"] is List) {
+      List<String> managers = [];
+      for (final ele in data["managers"]) {
+        if (ele is String) {
+          managers.add(ele);
+        }
+      }
+      result.managers = managers;
+    }
+    if (data["users"] is List) {
+      List<String> users = [];
+      for (final ele in data["users"]) {
+        if (ele is String) {
+          users.add(ele);
+        }
+      }
+      result.users = users;
+    }
+    if (data["managerUserCap"] is num) {
+      result.managerUserCap = int.tryParse("${data["managerUserCap"]}") ?? 10;
+    }
+    if (data["userUserCap"] is num) {
+      result.userUserCap = int.tryParse("${data["userUserCap"]}") ?? 100;
+    }
+    if (data["isAdmin"] is bool) {
+      result.isAdmin = data["isAdmin"];
+    }
+    if (data["isManager"] is bool) {
+      result.isManager = data["isManager"];
+    }
+    if (data["isUser"] is bool) {
+      result.isUser = data["isUser"];
     }
     if (data["createdAt"] is String) {
       result.createdAt = DateTime.parse(data["createdAt"]);

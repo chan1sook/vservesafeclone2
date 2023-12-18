@@ -28,9 +28,6 @@ export function startApiService(port = 4000) {
   );
   app.use(helmet({}));
 
-  app.use("/upload/avatar", express.static("upload/avatar"));
-  app.use("/upload/site-logo", express.static("upload/site-logo"));
-
   app.use((req, res, next) => {
     req.eventEmitter = eventEmitter;
     req.redisClient = redisClient;

@@ -12,7 +12,10 @@ class VserveEditSiteData {
   bool get isNameValid => editedData.name.isNotEmpty;
   bool get isFormValid => isNameValid;
 
-  Map<String, dynamic> toApiData({bool? withId = false}) {
+  Map<String, dynamic> toApiData({
+    bool? withId = false,
+    bool? noAdmins = false,
+  }) {
     return {
       if (withId == true) "id": editedData.id,
       "active": editedData.active,
@@ -20,7 +23,11 @@ class VserveEditSiteData {
       "logoUrl": editedData.logoUrl,
       "contractEmail": editedData.contractEmail,
       "phoneNumber": editedData.phoneNumber,
-      // "admins": editedData.admins,
+      if (noAdmins != true) "admins": editedData.admins,
+      "welcomeScreenEn": editedData.welcomeScreenEn,
+      "welcomeScreenTh": editedData.welcomeScreenTh,
+      "managerUserCap": editedData.managerUserCap,
+      "userUserCap": editedData.userUserCap,
       "note": editedData.note,
     };
   }

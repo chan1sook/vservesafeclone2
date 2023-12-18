@@ -17,7 +17,7 @@ class StatusItemComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(7),
       ),
       constraints: const BoxConstraints(minWidth: 100),
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       child: Text(
         active
             ? AppLocalizations.of(context)!.statusActive

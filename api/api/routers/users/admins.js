@@ -14,6 +14,7 @@ import APIError, {
 } from "../../../utils/apierror.js";
 import {
   getAdminUsers,
+  getUserById,
   isDeveloper,
   isSuperadmin,
 } from "../../../logics/user.js";
@@ -161,9 +162,9 @@ router.post("/adminuser/edit", json(), async (req, res) => {
       throw APIMissingFormParameterError;
     }
 
-    const existsUserData = await UserModel.findById(req.body.id).select(
-      "+hashedPw"
-    );
+    const existsUserData = await getUserById(req.body.id, {
+      withHashedPassword: true,
+    });
 
     if (!existsUserData) {
       throw APIUserTargetNotExistsError;
@@ -265,7 +266,7 @@ router.post("/adminuser/delete", json(), async (req, res) => {
       throw APIMissingFormParameterError;
     }
 
-    const existsUserData = await UserModel.findById(req.body.id);
+    const existsUserData = await getUserById(req.body.id);
     if (!existsUserData) {
       throw APIUserTargetNotExistsError;
     }

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/pages/dashboard_view.dart';
+import 'package:vservesafe/src/pages/error_view.dart';
 import 'package:vservesafe/src/pages/login_view.dart';
 
 class _MyCustomScrollBehavior extends MaterialScrollBehavior {
@@ -61,33 +63,50 @@ class VserveApp extends StatelessWidget {
             if (routeSettings.arguments is Map<String, dynamic>) {
               args = routeSettings.arguments as Map<String, dynamic>;
             }
+
+            developer.log("$args", name: "Arguments");
+
             return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
-                if (userController.userData != null) {
-                  String subRoute = "";
-                  if (routeSettings.name!.startsWith(DashboardView.routeName)) {
-                    subRoute = routeSettings.name!
+                if (routeSettings.name!.startsWith(DashboardView.routeName)) {
+                  if (userController.userData != null) {
+                    String subRoute = routeSettings.name!
                         .substring(DashboardView.routeName.length);
-                  }
-                  return DashboardView(
-                    settingsController: settingsController,
-                    userController: userController,
-                    subroute: subRoute,
-                    arguments: args,
-                  );
-                }
-
-                switch (routeSettings.name) {
-                  case LoginView.routeName:
-                  default:
+                    return DashboardView(
+                      settingsController: settingsController,
+                      userController: userController,
+                      subroute: subRoute,
+                      arguments: args,
+                    );
+                  } else {
                     return LoginView(
                       settingsController: settingsController,
                       userController: userController,
                       autoLogin:
                           args["autoLogin"] is bool ? args["autoLogin"] : true,
                     );
+                  }
                 }
+
+                if (routeSettings.name! == LoginView.routeName) {
+                  if (userController.userData == null) {
+                    return LoginView(
+                      settingsController: settingsController,
+                      userController: userController,
+                      autoLogin:
+                          args["autoLogin"] is bool ? args["autoLogin"] : true,
+                    );
+                  } else {
+                    return DashboardView(
+                      settingsController: settingsController,
+                      userController: userController,
+                      arguments: args,
+                    );
+                  }
+                }
+
+                return const ErrorView();
               },
             );
           },

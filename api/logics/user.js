@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-
 import UserModel from "../models/user.js";
 import { log } from "../utils/logging.js";
+import mongoose from "mongoose";
 
 export async function initDevUsers() {
   const targetUser = await UserModel.findOne({ role: "developer" });
@@ -40,15 +40,32 @@ export async function userLogin(username, password) {
   return null;
 }
 
-export async function getUserById(_id) {
-  const targetUser = await UserModel.findById(_id);
-  if (targetUser) {
-    const response = targetUser.toJSON();
-    delete response.hashedPw;
-    return response;
-  }
+export function getUserById(
+  _id,
+  { withHashedPassword = false } = { withHashedPassword: false }
+) {
+  let query = UserModel.findById(_id);
 
-  return null;
+  if (withHashedPassword) {
+    return query.select("+hashedPw");
+  } else {
+    return query;
+  }
+}
+
+export function getUserByAvatar(
+  avatarFileName,
+  { withHashedPassword = false } = { withHashedPassword: false }
+) {
+  let query = UserModel.findOne({
+    avatarUrl: { $in: avatarFileName },
+  });
+
+  if (withHashedPassword) {
+    return query.select("+hashedPw");
+  } else {
+    return query;
+  }
 }
 
 export function getUsers() {
@@ -73,6 +90,26 @@ export function getAdminUsers(
   return UserModel.find(query);
 }
 
+export function getUsersByIds(
+  ids = [],
+  { withInactive } = { withInactive: false }
+) {
+  const query = {
+    _id: {
+      $in: ids
+        .filter((ele) => mongoose.isObjectIdOrHexString(ele))
+        .map((ele) => new mongoose.Types.ObjectId(ele.toString())),
+    },
+    role: { $in: ["manager", "user"] },
+  };
+
+  if (!withInactive) {
+    query.active = true;
+  }
+
+  return UserModel.find(query);
+}
+
 export function isDeveloper(userData) {
   return (
     !!userData && typeof userData === "object" && userData.role === "developer"
@@ -84,5 +121,15 @@ export function isSuperadmin(userData) {
     !!userData &&
     typeof userData === "object" &&
     (userData.role === "developer" || userData.role === "superadmin")
+  );
+}
+
+export function isAdmin(userData) {
+  return (
+    !!userData &&
+    typeof userData === "object" &&
+    (userData.role === "developer" ||
+      userData.role === "superadmin" ||
+      userData.role === "admin")
   );
 }

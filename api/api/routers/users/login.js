@@ -9,9 +9,9 @@ import APIError, {
   APIServerNoSessionError,
   APIAuthFailedError,
   APIMalformedParameterError,
+  APIUserTargetNotExistsError,
 } from "../../../utils/apierror.js";
 import { getUserById, userLogin } from "../../../logics/user.js";
-import UserModel from "../../../models/user.js";
 
 const router = Router();
 
@@ -69,8 +69,11 @@ router.get("/user", async (req, res) => {
 
     if (req.session.userData) {
       const userData = await getUserById(req.session.userData._id);
+
       if (userData) {
-        fullUserData = userData;
+        const result = userData.toJSON();
+        delete result.hashedPw;
+        fullUserData = result;
       }
     }
 
@@ -108,9 +111,13 @@ router.post("/user/update", json(), async (req, res) => {
       throw APIMissingFormParameterError;
     }
 
-    const userData = await UserModel.findById(req.session.userData._id).select(
-      "+hashedPw"
-    );
+    const userData = await getUserById(req.session.userData._id, {
+      withHashedPassword: true,
+    });
+
+    if (!userData) {
+      throw APIUserTargetNotExistsError;
+    }
 
     if (typeof req.body.avatarUrl !== "undefined") {
       userData.avatarUrl = req.body.avatarUrl;

@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "appTitle": "Vservesafe",
   "@appTitle": {
     "description": "The title of the application"
@@ -83,6 +84,10 @@
   "@roleDeveloper": {
     "description": "Developer Role"
   },
+  "paginationSelectPageTitle": "Select Page",
+  "@paginationSelectPageTitle": {
+    "description": "Select Page Title in Pagination Component"
+  },
   "loginViewTitle": "Login",
   "@loginViewTitle": {
     "description": "Login View Title"
@@ -96,7 +101,7 @@
     "description": "Login Email in Login View"
   },
   "loginEmailHint": "Email Address",
-  "@loginEmailTitle": {
+  "@loginEmailHint": {
     "description": "Login Email Hint in Login View"
   },
   "loginPasswordTitle": "Password",
@@ -143,9 +148,486 @@
   "@dashboardLogoutDropdownMenu": {
     "description": "Edit Profile Dropdown menu in Dashboard View"
   },
+  "dashboardMenuHome": "Home",
+  "@dashboardMenuHome": {
+    "description": "Home Menu in Dashboard Page"
+  },
+  "dashboardMenuShedeinFoodSafety": "Food Safety Management",
+  "@dashboardMenuShedeinFoodSafety": {
+    "description": "Shedein Food Safety Management Menu in Dashboard Page"
+  },
+  "shedeinFoodSafetyFormTab": "Form",
+  "@shedeininFoodSafetyFormTab": {
+    "description": "Form Tab in Shedein Food Safety Management Page"
+  },
+  "shedeinFoodSafetyReportTab": "Report",
+  "@shedeininFoodSafetyReportTab": {
+    "description": "Report Tab in Shedein Food Safety Management Page"
+  },
+  "shedeinFoodSafetyReportSortLabel": "Sort By",
+  "@shedeinFoodSafetyReportSortLabel": {
+    "description": "Filter Label in Shedein Food Safety Management Report Tab Page"
+  },
+  "shedeinFoodSafetyReportAnswerByLabel": "Answer By",
+  "@shedeininFoodSafetyReportAnswerByLabel": {
+    "description": "Answer By Label in Shedein Food Safety Management Report Tab Page"
+  },
+  "shedeinFoodSafetyReportFormTypeLabel": "From Type",
+  "@shedeininFoodSafetyReportFromTypeLabel": {
+    "description": "From Type Label in Shedein Food Safety Management Report Tab Page"
+  },
+  "shedeinFoodSafetyReportAnswerAtLabel": "Answer At",
+  "@shedeininFoodSafetyReportAnswerAtLabel": {
+    "description": "Answer At Label in Shedein Food Safety Management Report Tab Page"
+  },
+  "shedeinFoodSafetySvaTitle": "Food Safety Management System Verification Audit",
+  "@shedeinFoodSafetySvaTitle": {
+    "description": "Food Safety Management SVA Title in Shedein Food Safety"
+  },
+  "shedeinFoodSafetySvaShort": "SVA",
+  "@shedeinFoodSafetySvaShort": {
+    "description": "SVA Short Name"
+  },
+  "shedeinFoodSafetySvaTargetLabel": "From",
+  "@shedeinFoodSafetySvaTargetLabel": {
+    "description": "Audit Target Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaAreaLabel": "Audit Area",
+  "@shedeinFoodSafetySvaAreaLabel": {
+    "description": "Audit Area Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaDateLabel": "Audit Date",
+  "@shedeinFoodSafetySvaDateLabel": {
+    "description": "Audit Date Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaPercentScoreLabel": "Achieved Score (%)",
+  "@shedeinFoodSafetySvaPercentScoreLabel": {
+    "description": "Achieved Score Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaSeqTitle": "No.",
+  "@shedeinFoodSafetySvaSeqTitle": {
+    "description": "Number Sequence Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaNameTitle": "Audit Requirement/Assessment",
+  "@shedeinFoodSafetySvaNameTitle": {
+    "description": "Name Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaRiskLevelTitle": "Risk Level",
+  "@shedeinFoodSafetySvaRiskLevelTitle": {
+    "description": "Risk Level Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaBaseScoreTitle": "STD. Score",
+  "@shedeinFoodSafetySvaBaseScoreTitle": {
+    "description": "Base Score Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaComplianceStatusTitle": "Compliance Status",
+  "@shedeinFoodSafetySvaComplianceStatusTitle": {
+    "description": "Compliance Status Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaComplianceChoice": "Compliance",
+  "@shedeinFoodSafetySvaComplianceChoice": {
+    "description": "Compliance Choice in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaNotComplianceChoice": "Not Compliance",
+  "@shedeinFoodSafetySvaNotComplianceChoice": {
+    "description": "Not Compliance Choice in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaScoreDeductionTitle": "Score Deduction",
+  "@shedeinFoodSafetySvaScoreDeductionTitle": {
+    "description": "Score Deduction Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaFindingsTitle": "Findings",
+  "@shedeinFoodSafetySvaFindingsTitle": {
+    "description": "Findings Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaFileSelectedCountLabel": "{x, plural, =0{No File Selected} =1{Selected File} other{Selected {x} Files}}",
+  "@shedeinFoodSafetySvaFileSelectedCountLabel": {
+    "description": "File Count in Food Safety Management SVA Page",
+    "placeholders": {
+      "x": {
+        "type": "int",
+        "example": "1"
+      }}
+  },
+  "shedeinFoodSafetySvaFileLink": "File",
+  "@shedeinFoodSafetySvaFileLink": {
+    "description": "File Link Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaTotalScoreLabel": "Total Score",
+  "@shedeinFoodSafetySvaTotalScoreLabel": {
+    "description": "Total Score Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaTotalDeductionLabel": "Total Deduction",
+  "@shedeinFoodSafetySvaTotalDeductionLabel": {
+    "description": "Total Deduction Label in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaRemarkTitle": "Remark : Risk Level",
+  "@shedeinFoodSafetySvaRemarkTitle": {
+    "description": "Remark Title in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaRemarkCriticalRemarkText": "C = Critical risk (Score deduction max 5 score)",
+  "@shedeinFoodSafetySvaRemarkCriticalRemarkText": {
+    "description": "Remark Critical Remark Text in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaRemarkMajorRemarkText": "M = Major risk (Score deduction max 3 score)",
+  "@shedeinFoodSafetySvaRemarkMajorRemarkText": {
+    "description": "Remark Major Remark Text in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaRemarkMinorRemarkText": "Mi = Minor risk (Score deduction max 1 score)",
+  "@shedeinFoodSafetySvaRemarkMinorRemarkText": {
+    "description": "Remark Mino Remark Text in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaSubmitButton": "Submit",
+  "@shedeinFoodSafetySvaSubmitButton": {
+    "description": "Submit Button in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaProgressUploadFile": "Upload Evidence Files...",
+  "@shedeinFoodSafetySvaProgressUploadFile": {
+    "description": "Upload Evidence File Progress in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaProgressSubmitData": "Submit Data...",
+  "@shedeinFoodSafetySvaProgressSubmitData": {
+    "description": "Submit Data Progress in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaSubmitDataSuccessfulTitle": "Submit Data Sucessful",
+  "@shedeinFoodSafetySvaSubmitDataSuccessfulTitle": {
+    "description": "Sucessful Submit Data in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySvaSubmitDataFailedTitle": "Submit Data Failed",
+  "@shedeinFoodSafetySvaSubmitDataFailedTitle": {
+    "description": "Failed Submit Data in Food Safety Management SVA Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceReviewTitle": "Supplier Performance Review",
+  "@shedeinFoodSafetySupplierPerformanceReviewTitle": {
+    "description": "Food Safety Management Supplier Performance Review Title in Shedein Food Safety"
+  },
+  "shedeinFoodSafetySupplierPerformanceReviewShort": "Supplier Performance",
+  "@shedeinFoodSafetySupplierSvaPerformanceReviewShort": {
+    "description": "Supplier Performance Review Short Name"
+  },
+  "shedeinFoodSafetySupplierPerformanceAreaLabel": "Audit Area",
+  "@shedeinFoodSafetySupplierPerformanceAreaLabel": {
+    "description": "Audit Area Label in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceAnnuallyWarningText": "SUPPLIER PERFORMANCE TO BE REVIEWED AT LEAST ANNUALLY",
+  "@shedeinFoodSafetySupplierPerformanceAnnuallyWarningText": {
+    "description": "Annually Warning Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceAssessmentCriteriaLabel": "Assessment Criteria",
+  "@shedeinFoodSafetySupplierPerformanceAssessmentCriteriaLabel": {
+    "description": "Assessment Criteria Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceCriteriaQualityText": "Do product / services consistently meet the quality requirements ?",
+  "@shedeinFoodSafetySupplierPerformanceCriteriaQualityText": {
+    "description": "Criteria Quality Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceCriteriaDocumentText": "Are products / services supplied with adequate paperwork ?",
+  "@shedeinFoodSafetySupplierPerformanceCriteriaDocumentText": {
+    "description": "Criteria Document Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceCriteriaDeliveryText": "Does the supplier consistently meet delivery requirements ?",
+  "@shedeinFoodSafetySupplierPerformanceCriteriaDeliveryText": {
+    "description": "Criteria Delivery Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceCriteriaResponseText": "Does the supplier respond well when problems are raised ?",
+  "@shedeinFoodSafetySupplierPerformanceCriteriaResponseText": {
+    "description": "Criteria Response Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceRatingText": "Rate the supplier between 1 & 5  where 1 = Never and 5 = Always",
+  "@shedeinFoodSafetySupplierPerformanceRatingText": {
+    "description": "Review Rating Text in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceSupplierTitle": "Supplier",
+  "@shedeinFoodSafetySupplierPerformanceSupplierTitle": {
+    "description": "Supplier Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceProductTitle": "Product / Service",
+  "@shedeinFoodSafetySupplierPerformanceProductTitle": {
+    "description": "Product/Service Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceQualityScoreTitle": "Quality",
+  "@shedeinFoodSafetySupplierPerformanceQualityScoreTitle": {
+    "description": "Quality Score Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceDeliveryScoreTitle": "Delivery",
+  "@shedeinFoodSafetySupplierPerformanceDeliveryScoreTitle": {
+    "description": "Delivery Score Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceDocumentScoreTitle": "P'work",
+  "@shedeinFoodSafetySupplierPerformanceDocumentScoreTitle": {
+    "description": "Document Score Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceResponseScoreTitle": "Response",
+  "@shedeinFoodSafetySupplierPerformanceResponseScoreTitle": {
+    "description": "Response Score Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceTotalScoreTitle": "% Score",
+  "@shedeinFoodSafetySupplierPerformanceTotalScoreTitle": {
+    "description": "Total Score Percentage Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceReviewDateTitle": "Review Date",
+  "@shedeinFoodSafetySupplierPerformanceReviewDateTitle": {
+    "description": "Review Date Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceReviewByTitle": "Reviewed By",
+  "@shedeinFoodSafetySupplierPerformanceReviewByTitle": {
+    "description": "Review By Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceRemarkTitle": "Remark",
+  "@shedeinFoodSafetySupplierPerformanceRemarkTitle": {
+    "description": "Remark Title in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceSubmitButton": "Submit",
+  "@shedeinFoodSafetySupplierPerformanceSubmitButton": {
+    "description": "Submit Button in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceSubmitDataSuccessfulTitle": "Submit Data Sucessful",
+  "@shedeinFoodSafetySupplierPerformanceSubmitDataSuccessfulTitle": {
+    "description": "Sucessful Submit Data in Food Safety Management Supplier Performance Page"
+  },
+  "shedeinFoodSafetySupplierPerformanceSubmitDataFailedTitle": "Submit Data Failed",
+  "@shedeinFoodSafetySupplierPerformanceSubmitDataFailedTitle": {
+    "description": "Failed Submit Data in Food Safety Management Supplier Performance Page"
+  },
+  "dashboardMenuIot": "IoT",
+  "@dashboardMenuIot": {
+    "description": "IoT Menu in Dashboard Page"
+  },
+  "iotDashbordDeviceTab": "Devices",
+  "@iotDashbordDeviceTab": {
+    "description": "Device Tab in IoT Page"
+  },
+  "iotDashbordDeviceFilter": "Filter",
+  "@iotDashbordDeviceFilter": {
+    "description": "Filter in Device Tab in IoT Page"
+  },
+  "iotDashbordDeviceFilterType": "Type Filter",
+  "@iotDashbordDeviceFilterType": {
+    "description": "Type Filter in Device Tab in IoT Page"
+  },
+  "iotDashbordChartTab": "Chart",
+  "@iotDashbordChartTab": {
+    "description": "Chart Tab in IoT Page"
+  },
+  "dashboardMenuAdmin": "Admin",
+  "@dashboardMenuAdmin": {
+    "description": "Admin Menu in Dashboard Page"
+  },
+  "dashboardMenuUsersManager": "Users Managements",
+  "@dashboardMenuUsersManager": {
+    "description": "Users Managements Menu in Dashboard Page"
+  },
+  "usersManagerNewUserButton": "New",
+  "@usersManagerNewUserButton": {
+    "description": "New User Button in Users Managements Page"
+  },
+  "usersManagerNameTitle": "Name",
+  "@usersManagerNameTitle": {
+    "description": "Name Title in Users Managements Page"
+  },
+  "usersManagerEmailTitle": "Email",
+  "@usersManagerEmailTitle": {
+    "description": "Email Title in Users Managements Page"
+  },
+  "usersManagerRoleTitle": "Type",
+  "@usersManagerRoleTitle": {
+    "description": "Account Title in Users Managements Page"
+  },
+  "usersManagerNewUserTitle": "New User",
+  "@usersManagerNewUserTitle": {
+    "description": "New User Title in Users Managements Page"
+  },
+  "usersManagerEditUserTitle": "Edit User",
+  "@usersManagerEditUserTitle": {
+    "description": "Edit User Title in Users ManagementsPage"
+  },
+  "usersManagerFormActiveSwitch": "Active",
+  "@usersManagerFormActiveSwitch": {
+    "description": "Active Switch in Users Managements Edit Page"
+  },
+  "userAccountEditRoleTitle": "Account Type",
+  "@userAccountEditRoleTitle": {
+    "description": "Role Title in User Management Accounts Edit Page"
+  },
+  "userAccountEditActualNameTitle": "Name",
+  "@userAccountEditActualNameTitle": {
+    "description": "Name Title in User Management Accounts Edit Page"
+  },
+  "userAccountEditUsernameTitle": "Email",
+  "@userAccountEditUsernameTitle": {
+    "description": "Username Title in User Management Accounts Edit Page"
+  },
+  "userAccountEditUsernameInvalidText": "Must be Email",
+  "@userAccountEditUsernameInvalidText": {
+    "description": "Username Invalid Text in User Management Accounts Edit Page"
+  },
+  "userAccountEditPasswordTitle": "Password",
+  "@userAccountEditPasswordTitle": {
+    "description": "Password Title in User Management Accounts Edit Page"
+  },
+  "userAccountEditPasswordHintText": "At least 6 characters",
+  "@userAccountEditPasswordHintText": {
+    "description": "Password Hint in User Management Accounts Edit Page"
+  },
+  "userAccountEditGeneratePasswordText": "Generate Password",
+  "@userAccountEditGeneratePasswordText": {
+    "description": "Generate Password Text in User Management Accounts Edit Page"
+  },
+  "userAccountEditPasswordConfirmTitle": "Confirm Password",
+  "@userAccountEditPasswordConfirmTitle": {
+    "description": "Confirm Password Title in User Management Accounts Edit Page"
+  },
+  "userAccountEditPasswordConfirmHintText": "Confirm Password least 6 characters",
+  "@userAccountEditPasswordConfirmHintText": {
+    "description": "Confirm Password Hint Text in User Management Accounts Edit Page"
+  },
+  "userAccountEditPasswordConfirmInvalidText": "Password not match",
+  "@userAccountEditPasswordConfirmInvalidText": {
+    "description": "Confirm Password  Invalid Text in User Management Accounts Edit Page"
+  },
+  "userAccountChangePasswordButton": "Change",
+  "@userAccountChangePasswordButton": {
+    "description": "Change Password Button in User Management Accounts Page"
+  },
+  "userAccountChangePasswordConfirmButton": "Confirm",
+  "@userAccountChangePasswordConfirmButton": {
+    "description": "Change Password Confirm Button in User Management Accounts Page"
+  },
+  "userAccountChangePasswordRevertButton": "Revert",
+  "@userAccountChangePasswordRevertButton": {
+    "description": "Revert Change Password Button in User Management Accounts Page"
+  },
+  "userAccountEditNoteTitle": "Note",
+  "@userAccountEditNoteTitle": {
+    "description": "Note Title in User Management Accounts Edit Page"
+  },
+  "userAccountSaveButton": "Save",
+  "@userAccountSaveButton": {
+    "description": "Save Button in User Management Accounts Page"
+  },
+  "userAccountAddUserSuccessfulTitle": "Add User Sucessful",
+  "@userAccountAddUserSuccessfulTitle": {
+    "description": "Sucessful Add User Title Dialog"
+  },
+  "userAccountAddUserFailedTitle": "Add User Failed",
+  "@userAccountAddUserFailedTitle": {
+    "description": "Failed Add User Title Dialog"
+  },
+  "userAccountEditUserSuccessfulTitle": "Edit User Sucessful",
+  "@userAccountEditUserSuccessfulTitle": {
+    "description": "Sucessful Edit User Title Dialog"
+  },
+  "userAccountEditUserFailedTitle": "Edit User Failed",
+  "@userAccountEditUserFailedTitle": {
+    "description": "Failed Edit User Title Dialog"
+  },
+  "userAccountDeleteUserWarningTitle": "Do you want to delete user \"{user}\"?",
+  "@userAccountDeleteUserWarningTitle": {
+    "description": "Delete User Warning Title Dialog",
+    "placeholders": {
+      "user": {
+        "type": "String",
+        "example": "User A"
+      }
+    }
+  },
+  "userAccountDeleteUserSuccessfulTitle": "Delete User Sucessful",
+  "@userAccountDeleteUserSuccessfulTitle": {
+    "description": "Sucessful Delete User Title Dialog"
+  },
+  "userAccountDeleteUserFailedTitle": "Delete User Failed",
+  "@userAccountDeleteUserFailedTitle": {
+    "description": "Failed Delete User Title Dialog"
+  },
+  "dashboardMenuDeviceManagement": "Device Management",
+  "@dashboardMenuDeviceManagement": {
+    "description": "Device Management Menu in Dashboard Page"
+  },
+  "iotDeviceMacAddressTitle": "MAC",
+  "@iotDeviceMacAddressTitle": {
+    "description": "Mac Address Title in Device Management Page"
+  },
+  "iotDeviceNameTitle": "Name",
+  "@iotDeviceNameTitle": {
+    "description": "Name Title in Device Management Page"
+  },
+  "iotDeviceNoteTitle": "Note",
+  "@iotDeviceNoteTitle": {
+    "description": "Note Title in Device Management Page"
+  },
+  "iotDeviceNewDeviceButton": "New Device",
+  "@iotDeviceNewDeviceButton": {
+    "description": "New Device Button in Device Management Page"
+  },
+  "iotDeviceNewDeviceTitle": "New Device",
+  "@iotDeviceNewDeviceTitle": {
+    "description": "New Device Title in Device Edit Page"
+  },
+  "iotDeviceEditDeviceTitle": "Edit Device",
+  "@iotDeviceEditDeviceTitle": {
+    "description": "Edit Device Title in Device Edit Page"
+  },
+  "iotDeviceFormActiveSwitch": "Active",
+  "@iotDeviceFormActiveSwitch": {
+    "description": "Active Switch in Device Edit Page"
+  },
+  "iotDeviceEditMacAddressTitle": "MAC Address",
+  "@iotDeviceEditMacAddressTitle": {
+    "description": "MAC Address Title in Device Edit Page"
+  },
+  "iotDeviceEditNameTitle": "Name",
+  "@iotDeviceEditNameTitle": {
+    "description": "Name Title in Device Edit Page"
+  },
+  "iotDeviceEditTypeTitle": "Type",
+  "@iotDeviceEditTypeTitle": {
+    "description": "Type Title in Device Edit Page"
+  },
+  "iotDeviceEditNoteTitle": "Note",
+  "@iotDeviceEditNoteTitle": {
+    "description": "Note Title in Device Edit Page"
+  },
+  "iotDeviceEditSaveButton": "Save",
+  "@iotDeviceEditSaveButton": {
+    "description": "Save Button in Device Edit Page"
+  },
+  "iotDeviceEditAddDeviceSuccessfulTitle": "Add Device Sucessful",
+  "@iotDeviceEditAddDeviceSuccessfulTitle": {
+    "description": "Sucessful Add Device Title Dialog"
+  },
+  "iotDeviceEditAddDeviceFailedTitle": "Add Device Failed",
+  "@iotDeviceEditAddDeviceFailedTitle": {
+    "description": "Failed Add Device Title Dialog"
+  },
+  "iotDeviceEditEditDeviceSuccessfulTitle": "Edit Device Sucessful",
+  "@iotDeviceEditEditDeviceSuccessfulTitle": {
+    "description": "Sucessful Edit Device Title Dialog"
+  },
+  "iotDeviceEditEditDeviceFailedTitle": "Edit Device Failed",
+  "@iotDeviceEditEditDeviceFailedTitle": {
+    "description": "Failed Edit Device Title Dialog"
+  },
+  "iotDeviceEditDeleteDeviceWarningTitle": "Do you want to delete device \"{device}\"?",
+  "@iotDeviceEditDeleteDeviceWarningTitle": {
+    "description": "Delete Device Warning Title Dialog",
+    "placeholders": {
+      "device": {
+        "type": "String",
+        "example": "Device A"
+      }
+    }
+  },
+  "iotDeviceEditDeleteDeviceSuccessfulTitle": "Delete Device Sucessful",
+  "@iotDeviceEditDeleteDeviceSuccessfulTitle": {
+    "description": "Sucessful Delete Device Title Dialog"
+  },
+  "iotDeviceEditDeleteDeviceFailedTitle": "Delete Device Failed",
+  "@iotDeviceEditDeleteDeviceFailedTitle": {
+    "description": "Failed Delete Device Title Dialog"
+  },
   "dashboardMenuSuperAdmin": "Super Admin",
   "@dashboardMenuSuperAdmin": {
-    "description": "Super Admin in Dashboard Page"
+    "description": "Super Admin Menu in Dashboard Page"
   },
   "dashboardMenuAdminAccounts": "Admin Accounts",
   "@dashboardMenuAdminAccounts": {
@@ -175,7 +657,10 @@
   "@adminAccountsEditUserTitle": {
     "description": "Edit User Title in Admin Accounts Page"
   },
-
+  "adminAccountsFormActiveSwitch": "Active",
+  "@adminAccountsFormActiveSwitch": {
+    "description": "Active Switch in Admin Accounts Edit Page"
+  },
   "adminAccountEditRoleTitle": "Account Type",
   "@adminAccountEditRoleTitle": {
     "description": "Role Title in Admin Accounts Edit Page"
@@ -216,33 +701,44 @@
   "@adminAccountEditPasswordConfirmInvalidText": {
     "description": "Confirm Password  Invalid Text in Admin Accounts Edit Page"
   },
+  "adminAccountChangePasswordButton": "Change",
+  "@adminAccountChangePasswordButton": {
+    "description": "Change Password Button in Admin User Management Accounts Page"
+  },
+  "adminAccountChangePasswordConfirmButton": "Confirm",
+  "@adminAccountChangePasswordConfirmButton": {
+    "description": "Change Password Confirm Button in Admin User Management Accounts Page"
+  },
+  "adminAccountChangePasswordRevertButton": "Revert",
+  "@adminAccountChangePasswordRevertButton": {
+    "description": "Revert Change Password Button in User Management Accounts Page"
+  },
   "adminAccountEditNoteTitle": "Note",
   "@adminAccountEditNoteTitle": {
     "description": "Note Title in Admin Accounts Edit Page"
   },
-
-  "adminAccountsSaveButton": "Save",
-  "@adminAccountsSaveButton": {
+  "adminAccountSaveButton": "Save",
+  "@adminAccountSaveButton": {
     "description": "Save Button in Admin Accounts Page"
   },
-  "adminAccountsAddUserSuccessfulTitle": "Add User Sucessful",
-  "@adminAccountsAddUserSuccessfulTitle": {
+  "adminAccountAddUserSuccessfulTitle": "Add User Sucessful",
+  "@adminAccountAddUserSuccessfulTitle": {
     "description": "Sucessful Add Admin User Title Dialog"
   },
-  "adminAccountsAddUserFailedTitle": "Add User Failed",
-  "@adminAccountsAddUserFailedTitle": {
+  "adminAccountAddUserFailedTitle": "Add User Failed",
+  "@adminAccountAddUserFailedTitle": {
     "description": "Failed Add Admin User Title Dialog"
   },
-  "adminAccountsEditUserSuccessfulTitle": "Edit User Sucessful",
-  "@adminAccountsAddUserSuccessfulTitle": {
+  "adminAccountEditUserSuccessfulTitle": "Edit User Sucessful",
+  "@adminAccountEditUserSuccessfulTitle": {
     "description": "Sucessful Edit Admin User Title Dialog"
   },
-  "adminAccountsEditUserFailedTitle": "Edit User Failed",
-  "@adminAccountsEditUserFailedTitle": {
+  "adminAccountEditUserFailedTitle": "Edit User Failed",
+  "@adminAccountEditUserFailedTitle": {
     "description": "Failed Edit Admin User Title Dialog"
   },
-  "adminAccountsDeleteUserWarningTitle": "Do you want to delete user \"{user}\"?",
-  "@adminAccountsDeleteUserWarningTitle": {
+  "adminAccountDeleteUserWarningTitle": "Do you want to delete user \"{user}\"?",
+  "@adminAccountDeleteUserWarningTitle": {
     "description": "Delete Admin User Warning Title Dialog",
     "placeholders": {
       "user": {
@@ -251,12 +747,12 @@
       }
     }
   },
-  "adminAccountsDeleteUserSuccessfulTitle": "Delete User Sucessful",
-  "@adminAccountsDeleteUserSuccessfulTitle": {
+  "adminAccountDeleteUserSuccessfulTitle": "Delete User Sucessful",
+  "@adminAccountDeleteUserSuccessfulTitle": {
     "description": "Sucessful Delete Admin User Title Dialog"
   },
-  "adminAccountsDeleteUserFailedTitle": "Delete User Failed",
-  "@adminAccountsDeleteUserFailedTitle": {
+  "adminAccountDeleteUserFailedTitle": "Delete User Failed",
+  "@adminAccountDeleteUserFailedTitle": {
     "description": "Failed Delete Admin User Title Dialog"
   },
   "dashboardMenuSiteLists": "Site Lists",
@@ -315,6 +811,10 @@
   "@siteEditAdminsTitle": {
     "description": "Administrators Title in Site Edit of Site Lists Page"
   },
+  "siteEditWelcomeScreenTitle": "Welcome Screen (Beta)",
+  "@siteEditWelcomeScreenTitle": {
+    "description": "Welcome Screen in Site Edit of Site Lists Page"
+  },
   "siteEditNotesTitle": "Notes",
   "@siteEditNotesTitle": {
     "description": "Note Title in Site Edit of Site Lists Page"
@@ -369,6 +869,148 @@
   "@siteEditDeleteSiteFailedTitle": {
     "description": "Failed Delete Site Title Dialog"
   },
+  "dashboardMenuDepartment": "Department",
+  "@dashboardMenuDepartment": {
+    "description": "Department Menu in Dashboard Page"
+  },
+  "departmentsNameTitle": "Name",
+  "@departmentsNameTitle": {
+    "description": "Name Title in Departments Page"
+  },
+  "departmentsNoteTitle": "Note",
+  "@departmentsNoteTitle": {
+    "description": "Note Title in Departments Page"
+  },
+  "departmentsNewDepartmentButton": "New",
+  "@departmentsNewDepartmentButton": {
+    "description": "New Department Button in Departments Page"
+  },
+  "departmentsNewDepartmentTitle": "New Department",
+  "@departmentsNewDepartmentTitle": {
+    "description": "New Department Title in Department Menu"
+  },
+  "departmentsEditDepartmentTitle": "Edit Department",
+  "@departmentsEditDepartmentTitle": {
+    "description": "Edit Department Title in Department Menu"
+  },
+  "departmentsFormActiveSwitch": "Active",
+  "@departmentsFormActiveSwitch": {
+    "description": "Active Switch in Department Menu"
+  },
+  "departmentEditLogoTitle": "Logo",
+  "@departmentEditLogoTitle": {
+    "description": "Logo Title in Department Edit of Department Menu"
+  },
+  "departmentEditChangeLogoButton": "Change Logo",
+  "@departmentEditChangeLogoButton": {
+    "description": "Change Logo Button Text in Department Edit of Department Menu"
+  },
+  "departmentEditRevertLogoButton": "Revert",
+  "@departmentEditRevertLogoButton": {
+    "description": "Revert Logo Button Text in Department Edit of Department Menu"
+  },
+  "departmentEditNameTitle": "Name",
+  "@departmentEditNameTitle": {
+    "description": "Name Title in Department Edit of Departments Page"
+  },
+  "departmentEditContractEmailTitle": "Contract Email",
+  "@departmentEditContractEmailTitle": {
+    "description": "Contract Email Title in Department Edit of Departments Page"
+  },
+  "departmentEditPhoneTitle": "Phone",
+  "@departmentEditPhoneTitle": {
+    "description": "Phone Title  in Department Edit of Departments Page"
+  },
+  "departmentEditLocationsTitle": "Locations",
+  "@departmentEditLocationsTitle": {
+    "description": "Locations Title in Department Edit of Departments Page"
+  },
+  "departmentEditLocationInvalidTitle": "Location must not empty",
+  "@departmentEditLocationInvalidTitle": {
+    "description": "Location Invalid Text in Department Edit of Departments Page"
+  },
+  "departmentEditNotesTitle": "Notes",
+  "@departmentEditNotesTitle": {
+    "description": "Notes Title in Department Edit of Departments Page"
+  },
+  "departmentEditSaveButton": "Save",
+  "@departmentEditSaveButton": {
+    "description": "Save Button in Department Edit of Departments Page"
+  },
+  "departmentEditProgressUpdateLogo": "Uploading Logo Image...",
+  "@departmentEditProgressUpdateLogo": {
+    "description": "Uploading Logo Progress in Department Edit"
+  },
+  "departmentEditProgressAddDepartment": "Add Department...",
+  "@departmentEditProgressAddDepartment": {
+    "description": "Add Department Progress in Department Edit"
+  },
+  "departmentEditProgressEditDepartment": "Edit Department...",
+  "@departmentEditProgressEditDepartment": {
+    "description": "Edit Department Progress in Department Edit"
+  },
+  "departmentEditAddDepartmentSuccessfulTitle": "Add Department Sucessful",
+  "@departmentEditAddDepartmentSuccessfulTitle": {
+    "description": "Sucessful Add Department Title Dialog"
+  },
+  "departmentEditAddDepartmentFailedTitle": "Add Department Failed",
+  "@departmentEditAddDepartmentFailedTitle": {
+    "description": "Failed Add Department Title Dialog"
+  },
+  "departmentEditEditDepartmentSuccessfulTitle": "Edit Department Sucessful",
+  "@departmentEditEditDepartmentSuccessfulTitle": {
+    "description": "Sucessful Edit Department Title Dialog"
+  },
+  "departmentEditEditDepartmentFailedTitle": "Edit Department Failed",
+  "@departmentEditEditDepartmentFailedTitle": {
+    "description": "Failed Edit Department Title Dialog"
+  },
+  "departmentEditDeleteDepartmentWarningTitle": "Do you want to delete department \"{department}\"?",
+  "@departmentEditDeleteDepartmentWarningTitle": {
+    "description": "Delete Department Warning Title Dialog",
+    "placeholders": {
+      "department": {
+        "type": "String",
+        "example": "Department A"
+      }
+    }
+  },
+  "departmentEditDeleteDepartmentSuccessfulTitle": "Delete Department Sucessful",
+  "@departmentEditDeleteDepartmentSuccessfulTitle": {
+    "description": "Sucessful Delete Department Title Dialog"
+  },
+  "departmentEditDeleteDepartmentFailedTitle": "Delete Department Failed",
+  "@departmentEditDeleteDepartmentFailedTitle": {
+    "description": "Failed Delete Department Title Dialog"
+  },
+  "dashboardMenuSetting": "Setting",
+  "@dashboardMenuSetting": {
+    "description": "Setting Menu in Dashboard Page"
+  },
+  "dashboardMenuSelectSite": "Select Site",
+  "@dashboardMenuSelectSite": {
+    "description": "Select Site Menu in Dashboard Page"
+  },
+  "selectSiteTitle": "Please Select Site",
+  "@selectSiteTitle": {
+    "description": "Select Site Title in Select Site"
+  },
+  "selectSiteSelectButton": "Select",
+  "@selectSiteSelectButton": {
+    "description": "Select Site Button in Select Site"
+  },
+  "dashboardMenuSiteSetting": "Site Setting",
+  "@dashboardMenuSiteSetting": {
+    "description": "Site Setting Menu in Dashboard Page"
+  },
+  "siteSettingGeneralTab": "General",
+  "@siteSettingGeneralTab": {
+    "description": "General Tab in Site Setting Page"
+  },
+  "siteSettingCatergoryTab": "Catergory",
+  "@siteSettingCatergoryTab": {
+    "description": "Catergory Tab in Site Setting Page"
+  },
   "dashboardMenuProfile": "Profile",
   "@dashboardMenuProfile": {
     "description": "Profile Menu in Dashboard Page"
@@ -390,7 +1032,7 @@
     "description": "Change Photo Button Text in Edit Tab of Profile Page"
   },
   "profileEditRevertAvatarButton": "Revert",
-  "@profileEditChangeAvatarButton": {
+  "@profileEditRevertAvatarButton": {
     "description": "Revert Photo Button Text in Edit Tab of Profile Page"
   },
   "profileEditChangePasswordTitle": "Change Password",
@@ -422,7 +1064,7 @@
     "description": "New Password Confirm Text Field Hint in Change Password Tab of Profile Page"
   },
   "profileEditNewPasswordConfirmInvalidText": "Password Not Match",
-  "@profileEditNewPassworConfirmdTextFieldHint": {
+  "@profileEditNewPasswordConfirmInvalidText": {
     "description": "New Password Confirm Invalid Text in Change Password Tab of Profile Page"
   },
   "profileEditChangePasswordConfirmButton": "Confirm",

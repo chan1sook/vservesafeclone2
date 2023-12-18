@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "ui_nodejs"
+		},
+		{
+			"path": "vservesafe_gateway_screen"
 		}
 	],
 	"settings": {}

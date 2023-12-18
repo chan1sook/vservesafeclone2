@@ -8,15 +8,11 @@ const siteSchema = new mongoose.Schema(
     logoUrl: { type: String, default: "" },
     contractEmail: { type: String, default: "" },
     phoneNumber: { type: String, default: "" },
-    admins: [
-      new mongoose.Schema({
-        userId: { type: mongoose.Types.ObjectId, ref: "user" },
-      }),
-    ],
-    accountPackage: {
-      managers: { type: Number, default: 10 },
-      users: { type: Number, default: 100 },
-    },
+    admins: [{ type: mongoose.Types.ObjectId, ref: "user" }],
+    managers: [{ type: mongoose.Types.ObjectId, ref: "user" }],
+    users: [{ type: mongoose.Types.ObjectId, ref: "user" }],
+    managerUserCap: { type: Number, default: 10 },
+    userUserCap: { type: Number, default: 100 },
     examPackage: {
       enableExamLimits: { type: Boolean, default: true },
       examLimits: { type: Number, default: 5 },
@@ -34,7 +30,8 @@ const siteSchema = new mongoose.Schema(
         default: "all",
       },
     },
-    welcomeScreenText: { type: Map, of: String },
+    welcomeScreenEn: { type: String, default: "", select: false },
+    welcomeScreenTh: { type: String, default: "", select: false },
     note: { type: String, default: "" },
   },
   { timestamps: true }

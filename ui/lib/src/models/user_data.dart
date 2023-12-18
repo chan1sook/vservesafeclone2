@@ -87,6 +87,10 @@ class VserveUserData {
 
   bool get hasAvatarImage => avatarUrl.isNotEmpty;
 
+  bool get isAdmin => role == 'admin';
+  bool get isSuperAdmin => role == 'superadmin';
+  bool get isDeveloper => role == 'developer';
+
   static VserveUserData parseFromRawData(Map<String, dynamic> data) {
     final result = VserveUserData();
     if (data["_id"] is String) {

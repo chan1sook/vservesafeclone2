@@ -9,11 +9,13 @@ class SettingsController with ChangeNotifier {
 
   static const bool isDebugMode = kDebugMode;
 
-  // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
   late Locale _locale;
   late bool _isRememberLogin;
+
+  final List<String> _expandedMenu = [];
+  List<String> get expandedMenu => List.from(_expandedMenu);
 
   static List<Locale> get supportedLocales => SettingsService.supportedLocales;
 
@@ -46,6 +48,21 @@ class SettingsController with ChangeNotifier {
 
     developer.log("RememberLogin: ${_isRememberLogin.toString()}",
         name: "Setting");
+
+    notifyListeners();
+  }
+
+  Future<void> addExpanedMenu(String menu) async {
+    if (!_expandedMenu.contains(menu)) {
+      _expandedMenu.add(menu);
+    }
+    notifyListeners();
+  }
+
+  Future<void> removeExpanedMenu(String menu) async {
+    if (_expandedMenu.contains(menu)) {
+      _expandedMenu.remove(menu);
+    }
 
     notifyListeners();
   }

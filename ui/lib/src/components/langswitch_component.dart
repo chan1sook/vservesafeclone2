@@ -6,17 +6,15 @@ import 'package:vservesafe/src/controllers/settings_controller.dart';
 class DashboardLanguageSwitchComponent extends StatelessWidget {
   const DashboardLanguageSwitchComponent({
     super.key,
-    required this.settingsController,
+    this.selectedLocale,
     this.onSwitchLanguage,
   });
 
-  final SettingsController settingsController;
+  final Locale? selectedLocale;
   final Function(Locale)? onSwitchLanguage;
 
   @override
   Widget build(BuildContext context) {
-    Locale selectedLocale = settingsController.locale;
-
     return PopupMenuButton<Locale>(
       tooltip: "User",
       offset: const Offset(0, 55),
@@ -45,13 +43,15 @@ class DashboardLanguageSwitchComponent extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CountryFlag.fromCountryCode(
-            selectedLocale.countryCode ?? "en",
+            selectedLocale?.countryCode ?? "en",
             height: 14,
             width: 24,
           ),
           const SizedBox(width: 7),
-          Text(LocaleNames.of(context)!.nameOf(selectedLocale.languageCode) ??
-              selectedLocale.toLanguageTag()),
+          Text(LocaleNames.of(context)!
+                  .nameOf(selectedLocale?.languageCode ?? "en") ??
+              selectedLocale?.toLanguageTag() ??
+              "EN"),
         ],
       ),
     );

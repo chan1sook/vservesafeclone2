@@ -4,13 +4,13 @@ import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vservesafe/src/components/alert_component.dart';
 import 'package:vservesafe/src/controllers/user_controller.dart';
 import 'package:vservesafe/src/models/login_data.dart';
 import 'package:vservesafe/src/controllers/settings_controller.dart';
 import 'package:vservesafe/src/models/user_data.dart';
 import 'package:vservesafe/src/pages/dashboard_view.dart';
 import 'package:vservesafe/src/services/api_service.dart';
+import 'package:vservesafe/src/utils/alert_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({
@@ -49,6 +49,13 @@ class _LoginViewState extends State<LoginView> {
       final userData = await widget.userController.getUserServer();
       await widget.userController.updateUserData(userData);
 
+      if (widget.userController.userData != null) {
+        await widget.userController.updateAvaliableSitesData(
+            await widget.userController.getAvaliableSitesServer());
+        final site = await widget.userController.loadFirstSiteByPref();
+        await widget.userController.updateSelectedSite(site);
+      }
+
       await Future.delayed(const Duration(milliseconds: 500));
       if (context.mounted) {
         Navigator.of(context).pop();
@@ -67,72 +74,76 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: const Color(0xfffbfaff),
-            child: CustomPaint(
-              painter: _LoginBackgroundPainter(),
-            ),
-          ),
-          Center(
-            child: Card(
-              margin: const EdgeInsets.all(14),
-              elevation: 4,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  MediaQueryData mediaData = MediaQuery.of(context);
-                  final sideComponent = _LoginSideComponent(
-                    loginData: _loginData,
-                    locked: _isLoadingOpened,
-                    onDataChanged: _onDataChanged,
-                    onLogin: _onLogin,
-                  );
-
-                  if (mediaData.size.width >= 990) {
-                    return SizedBox(
-                      width: 760,
-                      child: IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                color: const Color(0xfff5f5f5),
-                                child: Image.asset(
-                                  "assets/images/login.png",
-                                  height: 200,
-                                  cacheHeight: 200,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 28, vertical: 14),
-                                child: sideComponent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 28, vertical: 14),
-                      width: math.min(mediaData.size.width, 400),
-                      child: sideComponent,
-                    );
-                  }
-                },
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: const Color(0xfffbfaff),
+              child: CustomPaint(
+                painter: _LoginBackgroundPainter(),
               ),
             ),
-          ),
-        ],
+            Center(
+              child: SingleChildScrollView(
+                child: Card(
+                  margin: const EdgeInsets.all(14),
+                  elevation: 4,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      MediaQueryData mediaData = MediaQuery.of(context);
+                      final sideComponent = _LoginSideComponent(
+                        loginData: _loginData,
+                        locked: _isLoadingOpened,
+                        onDataChanged: _onDataChanged,
+                        onLogin: _onLogin,
+                      );
+
+                      if (mediaData.size.width >= 990) {
+                        return SizedBox(
+                          width: 760,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: const Color(0xfff5f5f5),
+                                    child: Image.asset(
+                                      "assets/images/login.png",
+                                      height: 200,
+                                      cacheHeight: 200,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 28, vertical: 14),
+                                    child: sideComponent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 28, vertical: 14),
+                          width: math.min(mediaData.size.width, 400),
+                          child: sideComponent,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -150,8 +161,11 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _onLogin(VserveLoginData loginData) async {
-    VserveUserData userData = VserveUserData(username: "dev@sensesiot.net");
     _showLoadingDialog();
+
+    final failedAuthText = AppLocalizations.of(context)!.loginFailedAuthFailed;
+    final failedOtherText =
+        AppLocalizations.of(context)!.loginFailedOtherErrorProblem;
 
     try {
       final response = await ApiService.dio.post(
@@ -162,10 +176,15 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
 
-      userData = VserveUserData.parseFromRawData(response.data["userData"]);
-      await widget.userController.updateUserData(userData);
+      VserveUserData userData =
+          VserveUserData.parseFromRawData(response.data["userData"]);
       await widget.settingsController
           .updateRememberUser(_loginData.rememberLogin);
+      await widget.userController.updateAvaliableSitesData(
+          await widget.userController.getAvaliableSitesServer());
+      final site = await widget.userController.loadFirstSiteByPref();
+      await widget.userController.updateSelectedSite(site);
+      await widget.userController.updateUserData(userData);
 
       if (_isLoadingOpened && context.mounted) {
         Navigator.of(context).pop();
@@ -189,12 +208,12 @@ class _LoginViewState extends State<LoginView> {
         developer.log("${err.response?.data.toString()}", name: "Login");
 
         await _showLoginFailedDialog(
-          baseText: AppLocalizations.of(context)!.loginFailedAuthFailed,
+          baseText: failedAuthText,
           reason: err.toString(),
         );
       } else {
         await _showLoginFailedDialog(
-          baseText: AppLocalizations.of(context)!.loginFailedOtherErrorProblem,
+          baseText: failedOtherText,
           reason: err.toString(),
         );
       }
@@ -208,14 +227,9 @@ class _LoginViewState extends State<LoginView> {
 
     _isLoadingOpened = true;
 
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: SettingsController.isDebugMode,
-      builder: (BuildContext context) {
-        return const LoadingAlertDialog();
-      },
-    ).then((value) {
+    return showLoadingDialog(context, () {
       _isLoadingOpened = false;
+      setState(() {});
     });
   }
 
@@ -256,7 +270,7 @@ class _LoginViewState extends State<LoginView> {
   }
 }
 
-class _LoginSideComponent extends StatelessWidget {
+class _LoginSideComponent extends StatefulWidget {
   const _LoginSideComponent({
     required this.loginData,
     this.onDataChanged,
@@ -268,6 +282,21 @@ class _LoginSideComponent extends StatelessWidget {
   final Function(VserveLoginData)? onDataChanged;
   final Function(VserveLoginData)? onLogin;
   final bool locked;
+
+  @override
+  State<_LoginSideComponent> createState() => _LoginSideComponentState();
+}
+
+class _LoginSideComponentState extends State<_LoginSideComponent> {
+  final TextEditingController _usernameTextCtrl = TextEditingController();
+  final TextEditingController _passwordTextCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameTextCtrl.text = widget.loginData.username;
+    _passwordTextCtrl.text = widget.loginData.password;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -285,49 +314,55 @@ class _LoginSideComponent extends StatelessWidget {
         Text(AppLocalizations.of(context)!.loginWelcomeText),
         const SizedBox(height: 21),
         TextField(
-          readOnly: locked,
+          controller: _usernameTextCtrl,
+          readOnly: widget.locked,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             isDense: true,
             border: const OutlineInputBorder(),
             labelText: AppLocalizations.of(context)!.loginEmailTitle,
             hintText: AppLocalizations.of(context)!.loginEmailHint,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
           ),
           textInputAction: TextInputAction.next,
           onChanged: (email) {
-            VserveLoginData newLoginData = loginData.clone();
+            VserveLoginData newLoginData = widget.loginData.clone();
             newLoginData.username = email;
-            onDataChanged?.call(newLoginData);
+            widget.onDataChanged?.call(newLoginData);
           },
         ),
         const SizedBox(height: 14),
         TextField(
-          readOnly: locked,
+          controller: _passwordTextCtrl,
+          readOnly: widget.locked,
           decoration: InputDecoration(
             isDense: true,
             border: const OutlineInputBorder(),
             labelText: AppLocalizations.of(context)!.loginPasswordTitle,
             hintText: AppLocalizations.of(context)!.loginPasswordHint,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
           ),
           obscureText: true,
           textInputAction: TextInputAction.next,
           onChanged: (password) {
-            VserveLoginData newLoginData = loginData.clone();
+            VserveLoginData newLoginData = widget.loginData.clone();
             newLoginData.password = password;
-            onDataChanged?.call(newLoginData);
+            widget.onDataChanged?.call(newLoginData);
           },
         ),
         const SizedBox(height: 14),
         Row(
           children: [
             Checkbox(
-              value: loginData.rememberLogin,
-              onChanged: !locked
+              value: widget.loginData.rememberLogin,
+              onChanged: !widget.locked
                   ? (state) {
                       if (state != null) {
-                        VserveLoginData newLoginData = loginData.clone();
+                        VserveLoginData newLoginData = widget.loginData.clone();
                         newLoginData.rememberLogin = state;
-                        onDataChanged?.call(newLoginData);
+                        widget.onDataChanged?.call(newLoginData);
                       }
                     }
                   : null,
@@ -337,9 +372,10 @@ class _LoginSideComponent extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    VserveLoginData newLoginData = loginData.clone();
-                    newLoginData.rememberLogin = !loginData.rememberLogin;
-                    onDataChanged?.call(newLoginData);
+                    VserveLoginData newLoginData = widget.loginData.clone();
+                    newLoginData.rememberLogin =
+                        !widget.loginData.rememberLogin;
+                    widget.onDataChanged?.call(newLoginData);
                   },
                   child: Text(AppLocalizations.of(context)!.loginRememberMe),
                 ),
@@ -352,9 +388,9 @@ class _LoginSideComponent extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
           ),
-          onPressed: !locked && loginData.isFormValid
+          onPressed: !widget.locked && widget.loginData.isFormValid
               ? () {
-                  onLogin?.call(loginData.clone());
+                  widget.onLogin?.call(widget.loginData.clone());
                 }
               : null,
           child: Text(AppLocalizations.of(context)!.loginAction),

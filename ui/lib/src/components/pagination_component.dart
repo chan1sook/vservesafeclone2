@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaginationComponent extends StatelessWidget {
   const PaginationComponent({
@@ -21,16 +23,55 @@ class PaginationComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth - 28;
+        if (width < 500) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _paginationButtons(context),
+              const SizedBox(height: 7),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _paginationText,
+                  const SizedBox(width: 7),
+                  _paginationDropdown(context),
+                ],
+              ),
+            ],
+          );
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _paginationText,
+              const SizedBox(width: 7),
+              _paginationButtons(context),
+              const SizedBox(width: 7),
+              _paginationDropdown(context),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Widget get _paginationText {
+    return Text(
+      "$_startIndex - $_endIndex of $totalElements",
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _paginationButtons(BuildContext context) {
     const spacing = SizedBox(width: 7);
     const textBtnPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 12);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "$_startIndex - $_endIndex of $totalElements",
-          textAlign: TextAlign.center,
-        ),
-        spacing,
         InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
@@ -86,7 +127,9 @@ class PaginationComponent extends StatelessWidget {
         spacing,
         InkWell(
           customBorder: const CircleBorder(),
-          onTap: () {},
+          onTap: () {
+            _popupSelectPage(context);
+          },
           child: Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
@@ -157,32 +200,41 @@ class PaginationComponent extends StatelessWidget {
             child: Icon(FontAwesomeIcons.anglesRight, size: 14),
           ),
         ),
-        spacing,
-        SizedBox(
-          width: 75,
-          child: DropdownButtonFormField<int>(
-            decoration: const InputDecoration(
-              isDense: true,
-              border: OutlineInputBorder(),
-            ),
-            value: pageSize,
-            onChanged: (value) {
-              if (value != null) {
-                onPageSizeChange?.call(value);
-              }
-            },
-            items: [10, 25, 50].map((v) {
-              return DropdownMenuItem<int>(
-                value: v,
-                child: Text(
-                  "$v",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
       ],
+    );
+  }
+
+  Widget _paginationDropdown(BuildContext context) {
+    List<int> pageSizeItems = [10, 25, 50];
+    if (!pageSizeItems.contains(pageSize)) {
+      pageSizeItems.add(pageSize);
+      pageSizeItems.sort();
+    }
+
+    return SizedBox(
+      width: 75,
+      child: DropdownButtonFormField<int>(
+        decoration: const InputDecoration(
+          isDense: true,
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+        ),
+        value: pageSize,
+        onChanged: (value) {
+          if (value != null) {
+            onPageSizeChange?.call(value);
+          }
+        },
+        items: pageSizeItems.map((v) {
+          return DropdownMenuItem<int>(
+            value: v,
+            child: Text(
+              "$v",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -200,5 +252,46 @@ class PaginationComponent extends StatelessWidget {
       return 1;
     }
     return page;
+  }
+
+  void _popupSelectPage(context) async {
+    double page = currentPage.toDouble();
+
+    final value = await showDialog<int?>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.paginationSelectPageTitle),
+          content: SpinBox(
+            value: page,
+            decimals: 0,
+            min: 1,
+            max: _totalPages.toDouble(),
+            onSubmitted: (value) {
+              page = value;
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.confirm),
+              onPressed: () {
+                Navigator.of(context).pop(page.toInt());
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (value != null) {
+      onChangePage?.call(value);
+    }
   }
 }
